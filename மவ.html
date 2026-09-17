@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>அல் முயீன் அறக்கட்டளை</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; }
+        
+        .app-container { width: 100%; max-width: 420px; background: #fff; min-height: 100vh; box-shadow: 0 0 15px rgba(0,0,0,0.1); position: relative; padding-bottom: 85px; }
+        .app-header { background: linear-gradient(135deg, #003366, #001f3f); color: #fff; padding: 15px; text-align: center; border-bottom: 4px solid #D4AF37; }
+        .arabic-title { color: #D4AF37; font-size: 22px; font-weight: bold; }
+        .app-header h1 { font-size: 18px; margin-top: 2px; }
+        .app-header p { font-size: 11px; opacity: 0.8; }
+        
+        .tab-content { display: none; padding: 15px; }
+        .tab-content.active { display: block; }
+        
+        /* அடிப்படையான கார்டு ஸ்டைல்கள் */
+        .card { background: #fff; border-radius: 8px; padding: 12px; margin-bottom: 12px; border-left: 5px solid #D4AF37; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee; position: relative; transition: all 0.3s ease; }
+        .card h3 { color: #003366; margin-bottom: 6px; font-size: 15px; }
+        .card p, .card ul, .card ol { font-size: 13px; color: #555; line-height: 1.5; }
+        .card ul, .card ol { padding-left: 18px; }
+
+        /* கார்டு மாடல்கள் (Styles) */
+        .card.style-classic { border-left-width: 6px; border-radius: 4px; }
+        .card.style-rounded { border-radius: 16px; border-left-width: 5px; }
+        .card.style-shadow { border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-left-width: 5px; }
+        .card.style-flat { border: 2px solid #D4AF37; border-radius: 6px; box-shadow: none; }
+        
+        .badge { display: inline-block; background: #D4AF37; color: #003366; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-bottom: 5px; }
+        
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 12px; font-weight: bold; color: #003366; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
+        
+        .btn { width: 100%; background: #003366; color: #fff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; text-align: center; display: inline-block; text-decoration: none; }
+        .btn-gold { background: #D4AF37; color: #003366; }
+
+        .service-card { border-left-color: #4CAF50; margin-bottom: 15px; }
+        .account-box { background: rgba(0,0,0,0.02); border: 1px solid #e9ecef; border-radius: 6px; padding: 10px; margin-top: 10px; }
+        .account-box h4 { font-size: 12px; color: #003366; margin-bottom: 6px; }
+        
+        .account-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px; }
+        .account-table th, .account-table td { border: 1px solid #dee2e6; padding: 4px 6px; text-align: left; }
+        .account-table th { background: #e9ecef; color: #333; }
+        .total-row { font-weight: bold; background: #e2e3e5; color: #003366; }
+
+        .action-bar { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+        .btn-sm { padding: 4px 7px; font-size: 11px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 3px; cursor: pointer; border: none; }
+        .btn-pdf { background: #e74c3c; color: #fff; }
+        .btn-img { background: #2196F3; color: #fff; }
+        .btn-edit { background: #ff9800; color: #fff; }
+        .btn-delete { background: #dc3545; color: #fff; }
+        .btn-move { background: #6c757d; color: #fff; }
+        .btn-style { background: #9c27b0; color: #fff; }
+
+        .add-service-card { border-left-color: #2196F3; background: #f0f7ff; }
+        .sub-item-row { display: flex; gap: 5px; margin-bottom: 5px; align-items: center; }
+        .sub-item-row input[type="text"] { flex: 2; }
+        .sub-item-row input[type="number"] { flex: 1; }
+        .btn-remove-row { background: #dc3545; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; }
+
+        /* 🔒 ADMIN ONLY CONTROLS - (நிர்வாகி முறைக்கு தேவைக்கேற்ப மாற்றலாம்) */
+        .admin-only { display: flex; }
+
+        .admin-controls-fixed { position: fixed; bottom: 75px; right: 10px; display: flex; gap: 5px; z-index: 99; }
+        .admin-btn-style { background: #003366; color: #D4AF37; border: 1px solid #D4AF37; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
+        .modal img { max-width: 90%; max-height: 80%; border-radius: 8px; }
+        .modal-close { position: absolute; top: 20px; right: 25px; color: #fff; font-size: 30px; font-weight: bold; cursor: pointer; }
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 420px; background: #003366; display: flex; justify-content: space-around; padding: 8px 0; border-top: 2px solid #D4AF37; z-index: 100; }
+        .nav-item { color: #fff; text-decoration: none; font-size: 10px; text-align: center; opacity: 0.7; cursor: pointer; flex: 1; }
+        .nav-item.active { opacity: 1; color: #D4AF37; font-weight: bold; }
+        .nav-icon { font-size: 16px; display: block; margin-bottom: 2px; }
+
+        .date-time-tag { font-size: 11px; color: #888; margin-top: 4px; font-style: italic; display: block; }
+        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dashed #eee; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="app-header">
+        <div class="arabic-title">المعين</div>
+        <h1>அல் முயீன் அறக்கட்டளை</h1>
+        <p>AL MUEEN TRUST</p>
+    </div>
+
+    <!-- 1. முகப்பு -->
+    <div id="home" class="tab-content active">
+        <div class="card add-service-card admin-only">
+            <span class="badge" style="background:#003366; color:#fff;">➕ புதிய முகப்பு பாக்ஸ் சேர்க்க</span>
+            <div class="form-group" style="margin-top:5px;">
+                <label>தலைப்பு:</label>
+                <input type="text" id="homeTitleInput" placeholder="எ.கா: அறக்கட்டளை செய்தி">
+            </div>
+            <div class="form-group">
+                <label>விவரம்:</label>
+                <textarea id="homeDescInput" rows="3" placeholder="விவரங்களை இங்கே எழுதவும்..."></textarea>
+            </div>
+            <button class="btn btn-gold" onclick="addHomeCard()">கார்டு சேர்க்க (Add Box)</button>
+        </div>
+
+        <div id="homeContainer">
+            <div class="card style-classic" id="home-1">
+                <h3 class="card-title-text">அறக்கட்டளை பற்றி</h3>
+                <p class="card-desc-text"><b>மௌலானா மௌலவி முஃப்தீ T. ஷர்ஃபுதீன் பாகவி</b> அவர்களின் தலைமையில் ஏழை எளிய மக்களின் கல்வி, மருத்துவம் மற்றும் சமூக முன்னேற்றத்திற்காக இயங்கும் அறக்கட்டளை.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('home-1')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('home-1')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('home-1')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editHomeCard('home-1')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('home-1')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+            <div class="card style-classic" id="home-2">
+                <h3 class="card-title-text">முதன்மை நோக்கங்கள்</h3>
+                <ul class="card-desc-text">
+                    <li>கல்வி விழிப்புணர்வு மற்றும் கல்வி உதவித்தொகை.</li>
+                    <li>மருத்துவ உதவி நிதி வழங்குதல்.</li>
+                    <li>ஏழை எளியோருக்கு அத்தியாவசிய உதவி.</li>
+                </ul>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('home-2')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('home-2')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('home-2')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editHomeCard('home-2')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('home-2')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-gold" onclick="switchTab('donate')">நன்கொடை அளிக்க 💳</button>
+    </div>
+
+    <!-- 2. நிர்வாகிகள் -->
+    <div id="team" class="tab-content">
+        <div class="card add-service-card admin-only">
+            <span class="badge" style="background:#003366; color:#fff;">➕ புதிய நிர்வாகி பாக்ஸ் சேர்க்க</span>
+            <div class="form-group" style="margin-top:5px;">
+                <label>பதவி பெயர் (Badge):</label>
+                <input type="text" id="teamRoleInput" placeholder="எ.கா: செயற்குழு உறுப்பினர்">
+            </div>
+            <div class="form-group">
+                <label>பெயர்:</label>
+                <input type="text" id="teamNameInput" placeholder="எ.கா: அல் ஹாஃபிழ்...">
+            </div>
+            <div class="form-group">
+                <label>மொபைல் எண்:</label>
+                <input type="text" id="teamPhoneInput" placeholder="📞 9876543210">
+            </div>
+            <div class="form-group">
+                <label>பணி / நிர்வாக விவரம்:</label>
+                <textarea id="teamWorkInput" rows="2" placeholder="நிர்வாகி ஆற்றிவரும் பணிகள்..."></textarea>
+            </div>
+            <button class="btn btn-gold" onclick="addTeamMember()">நிர்வாகியைச் சேர்க்க</button>
+        </div>
+
+        <div id="teamContainer">
+            <div class="card style-classic" id="team-1">
+                <span class="badge role-text">நிறுவனர் & தலைவர்</span>
+                <h3 class="name-text">மௌலானா மௌலவி முஃப்தீ T. ஷர்ஃபுதீன் பாகவி</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> 9444648516</p>
+                <p class="work-text"><b>பணி:</b> அறக்கட்டளையின் ஒட்டுமொத்த வழிகாட்டுதல் மற்றும் முடிவுகள்.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-1')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-1')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-1')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-1')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-1')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-2">
+                <span class="badge role-text">செயலாளர் (General Secretary)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் அப்துல் ஹஸீப்</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> அறக்கட்டளையின் தினசரி செயல்பாடுகள் மற்றும் நிர்வாக ஒருங்கிணைப்பு.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-2')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-2')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-2')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-2')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-2')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-3">
+                <span class="badge role-text">துணை செயலாளர் (Deputy Secretary)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் தவ்ஃபீக் அஹ்மது</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> செயலாளர் ஈடுபாடுகளில், துணை செயலாளர் நிர்வாக மற்றும் ஆவணப் பணிகளில் உதவுவார்.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-3')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-3')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-3')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-3')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-3')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-4">
+                <span class="badge role-text">பொருளாளர் (Treasurer)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் அஸதுல்லாஹ்</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> வரவு செலவு கணக்குகள் மற்றும் நிதி மேலாண்மை.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-4')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-4')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-4')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-4')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-4')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-5">
+                <span class="badge role-text">துணை பொருளாளர் (Deputy Treasurer)</span>
+                <h3 class="name-text">அத் தாலிப் அப்ராருல் ஹக்</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> வரவு செலவு கணக்குகள் மற்றும் நிதி மேலாண்மைகளில் துணையாக பணியாற்றுவார்.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-5')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-5')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-5')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-5')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-5')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-6">
+                <span class="badge role-text">ஆவண காப்பாளர் (Records Keeper)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் குத்புத்தீன்</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> பதிவுகள், ஆவணங்கள், மற்றும் முக்கிய தகவல்களை பாதுகாக்கும் அதிகாரி.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-6')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-6')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-6')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-6')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-6')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-7">
+                <span class="badge role-text">செயற்குழு ஒருங்கிணைப்பாளர் (Committee Coordinator)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் அல்தாஃப்</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> செயற்குழுவின் செயல்பாடுகளை ஒருங்கிணைத்து, கூட்டங்களை ஏற்பாடு செய்து, உறுப்பினர்களுக்கு தகவல் பரிமாற்றம் செய்பவர்.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-7')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-7')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-7')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-7')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-7')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <!-- எண்களுடன் கூடிய எடிட் வசதி கொண்ட செயற்குழு உறுப்பினர்கள் பாக்ஸ் -->
+            <div class="card style-classic" id="team-8">
+                <span class="badge role-text">நிர்வாகக் குழு உறுப்பினர்கள்</span>
+                <h3 class="name-text">செயற்குழு உறுப்பினர்கள் பட்டியல்</h3>
+                <div id="committeeMembersList" style="margin-top:10px;">
+                    <div class="member-list-item" id="c-member-1">
+                        <span>1. முஹம்மது ஷமீம் மன்பயீ</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-1')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-1')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-1')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-1')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-2">
+                        <span>2. மௌலவி அல்ஹாஃபிழ் முஹம்மது ஹிஷாம் நாஃபியீ</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-2')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-2')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-2')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-2')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-3">
+                        <span>3. அல் ஹாஃபிழ் குத்புத்தீன்</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-3')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-3')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-3')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-3')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-4">
+                        <span>4. அல் ஹாஃபிழ் முஹம்மது பிலால்</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-4')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-4')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-4')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-4')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-5">
+                        <span>5. அல் ஹாஃபிழ் முஹம்மது ஜரீர்</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-5')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-5')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-5')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-5')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-6">
+                        <span>6. அல் ஹாஃபிழ் இஃஜாஸ் அஹ்மது</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-6')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-6')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-6')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-6')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-7">
+                        <span>7. அத் தாலிப் அப்துல் ஹலீம்</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-7')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-7')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-7')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-7')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="member-list-item" id="c-member-8">
+                        <span>8. அல் ஹாஃபிழ் உக்காஷ்</span>
+                        <div class="action-bar admin-only" style="margin:0;">
+                            <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-8')">⬆️</button>
+                            <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-8')">⬇️</button>
+                            <button class="btn-sm btn-edit" onclick="editMemberName('c-member-8')">✏️</button>
+                            <button class="btn-sm btn-delete" onclick="deleteMember('c-member-8')">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin-only" style="margin-top:10px; gap:5px;">
+                    <input type="text" id="newMemberNameInput" placeholder="புதிய உறுப்பினர் பெயர்" style="flex:1; padding:5px; border-radius:4px; border:1px solid #ccc; font-size:12px;">
+                    <button class="btn-sm btn-pdf" onclick="addCommitteeMember()">➕ உறுப்பினர் சேர்</button>
+                </div>
+
+                <div class="action-bar admin-only" style="margin-top:10px;">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-8')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-8')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-8')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-8')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. சேவைகள் & கணக்கு வழக்குகள் -->
+    <div id="projects" class="tab-content">
+        <h2 style="font-size:16px; color:#003366; margin-bottom:10px;">நிறைவேற்றப்பட்ட சேவைகள் & கணக்குகள்</h2>
+
+        <div class="card add-service-card admin-only" id="formCard">
+            <span class="badge" id="formBadge" style="background:#003366; color:#fff;">➕ புதிய சேவை சேர்க்க</span>
+            <h3 style="margin-top:5px;" id="formTitle">சேவை மற்றும் கணக்கு விவரங்களை உள்ளிடவும்</h3>
+            
+            <input type="hidden" id="editCardId" value="">
+
+            <div class="form-group" style="margin-top:8px;">
+                <label>சேவையின் பெயர்:</label>
+                <input type="text" id="newTitle" placeholder="எ.கா: இலவச மருத்துவ முகாம்">
+            </div>
+            
+            <div class="form-group">
+                <label>விவரம்:</label>
+                <textarea id="newDesc" rows="2" placeholder="சேவை பற்றிய சிறு விளக்கம்..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>செலவு விவரங்கள்:</label>
+                <div id="subItemsContainer">
+                    <div class="sub-item-row">
+                        <input type="text" class="item-name" placeholder="செலவு பெயர் (எ.கா: மருந்து)">
+                        <input type="number" class="item-cost" placeholder="தொகை (₹)">
+                        <button type="button" class="btn-remove-row" onclick="removeSubItemRow(this)">✖</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-sm btn-img" onclick="addSubItemRow()" style="margin-top:5px;">➕ செலவு வரிசை சேர்க்க</button>
+            </div>
+            <button class="btn btn-gold" onclick="saveServiceCard()">சேமிக்க (Save Card)</button>
+        </div>
+
+        <div id="projectsContainer"></div>
+    </div>
+
+    <!-- 4. எதிர்கால திட்டங்கள் (Future Projects) -->
+    <div id="future" class="tab-content">
+        <h2 style="font-size:16px; color:#003366; margin-bottom:10px;">எதிர்கால திட்டங்கள்</h2>
+        
+        <div class="card add-service-card admin-only">
+            <span class="badge" style="background:#003366; color:#fff;">➕ புதிய திட்டம் சேர்க்க</span>
+            <div class="form-group" style="margin-top:5px;">
+                <label>திட்டத்தின் பெயர்:</label>
+                <input type="text" id="futureTitleInput" placeholder="எ.கா: சொந்தக் கட்டடம் அமைப்பு">
+            </div>
+            <div class="form-group">
+                <label>திட்ட விவரம்:</label>
+                <textarea id="futureDescInput" rows="3" placeholder="திட்டம் பற்றிய விவரிக்கவும்..."></textarea>
+            </div>
+            <button class="btn btn-gold" onclick="addFutureProject()">திட்டத்தை சேர்க்க</button>
+        </div>
+
+        <div id="futureProjectsContainer">
+            <div class="card style-classic" id="future-1">
+                <span class="badge" style="background:#2196F3; color:#fff;">திட்டம் 1</span>
+                <h3 class="card-title-text">இலவச கல்வி மையம் நிறுவுதல்</h3>
+                <p class="card-desc-text">மாணவர்களுக்கு மாலை நேர இலவச சிறப்புப் பயிற்சி வகுப்புகள் மற்றும் வழிகாட்டல் மையம் அமைத்தல்.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('future-1')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('future-1')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('future-1')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editFutureProject('future-1')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('future-1')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. ஆலோசனைகள் / கருத்துக்கள் (Feedback with Auto Date & Time) -->
+    <div id="feedback" class="tab-content">
+        <h2 style="font-size:16px; color:#003366; margin-bottom:10px;">உங்கள் கருத்துக்கள் & ஆலோசனைகள்</h2>
+        
+        <div class="card add-service-card">
+            <span class="badge" style="background:#003366; color:#fff;">📝 புதிய ஆலோசனை பதிவு செய்ய</span>
+            <div class="form-group" style="margin-top:5px;">
+                <label>உங்கள் பெயர்:</label>
+                <input type="text" id="feedbackNameInput" placeholder="உங்கள் பெயர்">
+            </div>
+            <div class="form-group">
+                <label>ஆலோசனை / கருத்து:</label>
+                <textarea id="feedbackTextInput" rows="3" placeholder="உங்கள் கருத்துக்களை எழுதவும்..."></textarea>
+            </div>
+            <button class="btn btn-gold" onclick="addFeedback()">கருத்தை சமர்ப்பிக்க</button>
+        </div>
+
+        <div id="feedbackContainer">
+            <div class="card style-classic" id="feedback-1">
+                <h3>அப்துல்லாஹ்</h3>
+                <p>அறக்கட்டளையின் சேவைகள் மிகச் சிறப்பாக உள்ளது. கல்வி உதவித் திட்டத்தை இன்னும் விரிவுபடுத்தலாம்.</p>
+                <span class="date-time-tag">📅 15/09/2026 | ⏱️ 10:30 AM</span>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-delete" onclick="deleteCard('feedback-1')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. நன்கொடை (Donate) -->
+    <div id="donate" class="tab-content">
+        <div class="card style-classic">
+            <h3>வங்கிக் கணக்கு விவரங்கள்</h3>
+            <p><b>வங்கி:</b> ICICI Bank</p>
+            <p><b>கணக்கு எண்:</b> 123456789012</p>
+            <p><b>IFSC:</b> ICIC0001234</p>
+            <p><b>கிளை:</b> சென்னை</p>
+        </div>
+        <div class="card style-classic">
+            <h3>UPI மூலம் அனுப்ப</h3>
+            <p><b>GPay / PhonePe / Paytm:</b> 9444648516@upi</p>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home')"><span class="nav-icon">🏠</span>முகப்பு</div>
+        <div class="nav-item" onclick="switchTab('team')"><span class="nav-icon">👥</span>நிர்வாகிகள்</div>
+        <div class="nav-item" onclick="switchTab('projects')"><span class="nav-icon">📊</span>சேவைகள்</div>
+        <div class="nav-item" onclick="switchTab('future')"><span class="nav-icon">🎯</span>திட்டங்கள்</div>
+        <div class="nav-item" onclick="switchTab('feedback')"><span class="nav-icon">💬</span>ஆலோசனை</div>
+    </div>
+</div>
+
+<script>
+    // Tab switching
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Dynamic Card Controls
+    function moveCardUp(id) {
+        let card = document.getElementById(id);
+        if (card.previousElementSibling) {
+            card.parentNode.insertBefore(card, card.previousElementSibling);
+        }
+    }
+
+    function moveCardDown(id) {
+        let card = document.getElementById(id);
+        if (card.nextElementSibling) {
+            card.parentNode.insertBefore(card.nextElementSibling, card);
+        }
+    }
+
+    function deleteCard(id) {
+        if(confirm("இந்த பாக்ஸை நீக்க விரும்புகிறீர்களா?")) {
+            document.getElementById(id).remove();
+        }
+    }
+
+    function customizeCardStyle(id) {
+        let card = document.getElementById(id);
+        let styles = ['style-classic', 'style-rounded', 'style-shadow', 'style-flat'];
+        let currentStyle = styles.find(s => card.classList.contains(s)) || 'style-classic';
+        let nextIndex = (styles.indexOf(currentStyle) + 1) % styles.length;
+        
+        styles.forEach(s => card.classList.remove(s));
+        card.classList.add(styles[nextIndex]);
+    }
+
+    // Home Card Functions
+    function addHomeCard() {
+        let title = document.getElementById('homeTitleInput').value;
+        let desc = document.getElementById('homeDescInput').value;
+        if(!title) return alert("தலைப்பை உள்ளிடவும்!");
+
+        let id = 'home-' + Date.now();
+        let html = `
+            <div class="card style-classic" id="${id}">
+                <h3 class="card-title-text">${title}</h3>
+                <p class="card-desc-text">${desc}</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('${id}')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('${id}')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('${id}')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editHomeCard('${id}')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('${id}')">🗑️ நீக்கு</button>
+                </div>
+            </div>`;
+        document.getElementById('homeContainer').insertAdjacentHTML('beforeend', html);
+        document.getElementById('homeTitleInput').value = '';
+        document.getElementById('homeDescInput').value = '';
+    }
+
+    function editHomeCard(id) {
+        let card = document.getElementById(id);
+        let title = card.querySelector('.card-title-text').innerText;
+        let desc = card.querySelector('.card-desc-text').innerText;
+
+        let newTitle = prompt("தலைப்பை மாற்றவும்:", title);
+        let newDesc = prompt("விவரத்தை மாற்றவும்:", desc);
+
+        if(newTitle !== null) card.querySelector('.card-title-text').innerText = newTitle;
+        if(newDesc !== null) card.querySelector('.card-desc-text').innerText = newDesc;
+    }
+
+    // Committee Members Re-numbering & Controls
+    function renumberCommitteeMembers() {
+        let members = document.querySelectorAll('#committeeMembersList .member-list-item');
+        members.forEach((item, index) => {
+            let span = item.querySelector('span');
+            let text = span.innerText.replace(/^[0-9]+\.\s*/, '');
+            span.innerText = (index + 1) + ". " + text;
+        });
+    }
+
+    function moveMemberUp(id) {
+        let item = document.getElementById(id);
+        if (item.previousElementSibling) {
+            item.parentNode.insertBefore(item, item.previousElementSibling);
+            renumberCommitteeMembers();
+        }
+    }
+
+    function moveMemberDown(id) {
+        let item = document.getElementById(id);
+        if (item.nextElementSibling) {
+            item.parentNode.insertBefore(item.nextElementSibling, item);
+            renumberCommitteeMembers();
+        }
+    }
+
+    function editMemberName(id) {
+        let item = document.getElementById(id);
+        let span = item.querySelector('span');
+        let currentName = span.innerText.replace(/^[0-9]+\.\s*/, '');
+        let newName = prompt("உறுப்பினர் பெயரை மாற்றவும்:", currentName);
+        if(newName !== null && newName.trim() !== "") {
+            span.innerText = newName;
+            renumberCommitteeMembers();
+        }
+    }
+
+    function deleteMember(id) {
+        if(confirm("இந்த உறுப்பினரை நீக்க விரும்புகிறீர்களா?")) {
+            document.getElementById(id).remove();
+            renumberCommitteeMembers();
+        }
+    }
+
+    function addCommitteeMember() {
+        let input = document.getElementById('newMemberNameInput');
+        let name = input.value.trim();
+        if(!name) return alert("பெயரை உள்ளிடவும்!");
+
+        let id = 'c-member-' + Date.now();
+        let html = `
+            <div class="member-list-item" id="${id}">
+                <span>${name}</span>
+                <div class="action-bar admin-only" style="margin:0;">
+                    <button class="btn-sm btn-move" onclick="moveMemberUp('${id}')">⬆️</button>
+                    <button class="btn-sm btn-move" onclick="moveMemberDown('${id}')">⬇️</button>
+                    <button class="btn-sm btn-edit" onclick="editMemberName('${id}')">✏️</button>
+                    <button class="btn-sm btn-delete" onclick="deleteMember('${id}')">🗑️</button>
+                </div>
+            </div>`;
+        document.getElementById('committeeMembersList').insertAdjacentHTML('beforeend', html);
+        input.value = '';
+        renumberCommitteeMembers();
+    }
+
+    // Future Projects Functions
+    function addFutureProject() {
+        let title = document.getElementById('futureTitleInput').value;
+        let desc = document.getElementById('futureDescInput').value;
+        if(!title) return alert("திட்டத்தின் தலைப்பை உள்ளிடவும்!");
+
+        let id = 'future-' + Date.now();
+        let count = document.querySelectorAll('#futureProjectsContainer .card').length + 1;
+        let html = `
+            <div class="card style-classic" id="${id}">
+                <span class="badge" style="background:#2196F3; color:#fff;">திட்டம் ${count}</span>
+                <h3 class="card-title-text">${title}</h3>
+                <p class="card-desc-text">${desc}</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('${id}')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('${id}')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('${id}')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editFutureProject('${id}')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('${id}')">🗑️ நீக்கு</button>
+                </div>
+            </div>`;
+        document.getElementById('futureProjectsContainer').insertAdjacentHTML('beforeend', html);
+        document.getElementById('futureTitleInput').value = '';
+        document.getElementById('futureDescInput').value = '';
+    }
+
+    function editFutureProject(id) {
+        let card = document.getElementById(id);
+        let title = card.querySelector('.card-title-text').innerText;
+        let desc = card.querySelector('.card-desc-text').innerText;
+
+        let newTitle = prompt("திட்டத்தின் தலைப்பை மாற்றவும்:", title);
+        let newDesc = prompt("திட்டத்தின் விவரத்தை மாற்றவும்:", desc);
+
+        if(newTitle !== null) card.querySelector('.card-title-text').innerText = newTitle;
+        if(newDesc !== null) card.querySelector('.card-desc-text').innerText = newDesc;
+    }
+
+    // Feedback with Auto Date and Time
+    function addFeedback() {
+        let name = document.getElementById('feedbackNameInput').value || 'பெயர் குறிப்பிடப்படாதவர்';
+        let text = document.getElementById('feedbackTextInput').value;
+        if(!text) return alert("உங்கள் கருத்தை உள்ளிடவும்!");
+
+        let now = new Date();
+        let dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY
+        let timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        let id = 'feedback-' + Date.now();
+        let html = `
+            <div class="card style-classic" id="${id}">
+                <h3>${name}</h3>
+                <p>${text}</p>
+                <span class="date-time-tag">📅 ${dateStr} | ⏱️ ${timeStr}</span>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-delete" onclick="deleteCard('${id}')">🗑️ நீக்கு</button>
+                </div>
+            </div>`;
+        document.getElementById('feedbackContainer').insertAdjacentHTML('afterbegin', html);
+        document.getElementById('feedbackNameInput').value = '';
+        document.getElementById('feedbackTextInput').value = '';
+    }
+
+    // Sub-items for Service Card
+    function addSubItemRow() {
+        let row = `
+            <div class="sub-item-row">
+                <input type="text" class="item-name" placeholder="செலவு பெயர் (எ.கா: மருந்து)">
+                <input type="number" class="item-cost" placeholder="தொகை (₹)">
+                <button type="button" class="btn-remove-row" onclick="removeSubItemRow(this)">✖</button>
+            </div>`;
+        document.getElementById('subItemsContainer').insertAdjacentHTML('beforeend', row);
+    }
+
+    function removeSubItemRow(btn) {
+        btn.parentElement.remove();
+    }
+</script>
+
+</body>
+</html>
