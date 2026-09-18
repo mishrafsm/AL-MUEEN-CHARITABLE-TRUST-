@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>அல் முயீன் அறக்கட்டளை</title>
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; }
@@ -48,7 +50,7 @@
         .total-row { font-weight: bold; background: #e2e3e5; color: #003366; }
 
         .action-bar { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
-        .btn-sm { padding: 4px 7px; font-size: 11px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 3px; cursor: pointer; border: none; }
+        .btn-sm { padding: 4px 7px; font-size: 11px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-flex; align- items: center; gap: 3px; cursor: pointer; border: none; }
         .btn-pdf { background: #e74c3c; color: #fff; }
         .btn-img { background: #2196F3; color: #fff; }
         .btn-edit { background: #ff9800; color: #fff; }
@@ -62,8 +64,13 @@
         .sub-item-row input[type="number"] { flex: 1; }
         .btn-remove-row { background: #dc3545; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
-        /* 🔒 ADMIN ONLY CONTROLS - (நிர்வாகி முறைக்கு தேவைக்கேற்ப மாற்றலாம்) */
-        .admin-only { display: flex; }
+        /* 🔒 ADMIN ONLY CONTROLS - (இயல்புநிலையில் மறைக்கப்பட்டிருக்கும்) */
+        .admin-only { display: none !important; }
+        body.admin-mode .admin-only { display: flex !important; }
+        body.admin-mode div.admin-only { display: block !important; }
+
+        .admin-login-bar { text-align: center; padding: 8px; background: #f8f9fa; border-top: 1px solid #ddd; margin-bottom: 10px; }
+        .admin-toggle-btn { background: none; border: none; color: #888; font-size: 11px; cursor: pointer; }
 
         .admin-controls-fixed { position: fixed; bottom: 75px; right: 10px; display: flex; gap: 5px; z-index: 99; }
         .admin-btn-style { background: #003366; color: #D4AF37; border: 1px solid #D4AF37; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
@@ -466,6 +473,11 @@
         </div>
     </div>
 
+    <!-- Admin Login Bar -->
+    <div class="admin-login-bar">
+        <button class="admin-toggle-btn" onclick="toggleAdminMode()">🔒 Admin Login</button>
+    </div>
+
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('home')"><span class="nav-icon">🏠</span>முகப்பு</div>
@@ -477,6 +489,22 @@
 </div>
 
 <script>
+    // Admin Toggle System
+    function toggleAdminMode() {
+        if(document.body.classList.contains('admin-mode')) {
+            document.body.classList.remove('admin-mode');
+            alert("Admin Mode வெளியேறப்பட்டது.");
+        } else {
+            let pwd = prompt("Admin Password உள்ளிடவும்:");
+            if(pwd === "1234") { // Admin Password
+                document.body.classList.add('admin-mode');
+                alert("Admin Mode செயல்படுத்தப்பட்டது!");
+            } else {
+                alert("தவறான Password!");
+            }
+        }
+    }
+
     // Tab switching
     function switchTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
