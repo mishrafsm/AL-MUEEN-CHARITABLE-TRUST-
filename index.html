@@ -3,89 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>அல் முயீன் அறக்கட்டளை</title>
+    <title>அல் முயீன் அறக்கட்டளை - AL MUEEN TRUST</title>
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; display: flex; justify-content: center; }
+        :root {
+            --primary-blue: #0A192F;
+            --accent-gold: #D4AF37;
+            --accent-gold-hover: #B59226;
+            --bg-light: #F4F6F9;
+            --card-bg: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --success-green: #10B981;
+            --danger-red: #EF4444;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Mukta Malar', 'Poppins', sans-serif; }
+        body { background-color: #0F172A; color: var(--text-dark); display: flex; justify-content: center; min-height: 100vh; }
         
-        .app-container { width: 100%; max-width: 420px; background: #fff; min-height: 100vh; box-shadow: 0 0 15px rgba(0,0,0,0.1); position: relative; padding-bottom: 85px; }
-        .app-header { background: linear-gradient(135deg, #003366, #001f3f); color: #fff; padding: 15px; text-align: center; border-bottom: 4px solid #D4AF37; }
-        .arabic-title { color: #D4AF37; font-size: 22px; font-weight: bold; }
-        .app-header h1 { font-size: 18px; margin-top: 2px; }
-        .app-header p { font-size: 11px; opacity: 0.8; }
+        .app-container { width: 100%; max-width: 440px; background: var(--bg-light); min-height: 100vh; box-shadow: 0 0 30px rgba(0,0,0,0.3); position: relative; padding-bottom: 90px; }
         
-        .tab-content { display: none; padding: 15px; }
+        /* App Header */
+        .app-header { background: linear-gradient(135deg, #0A192F 0%, #1E293B 100%); color: #fff; padding: 25px 20px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); position: relative; overflow: hidden; }
+        .app-header::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(212,175,55,0.15), transparent 70%); pointer-events: none; }
+        .arabic-title { color: var(--accent-gold); font-size: 26px; font-weight: 700; letter-spacing: 1px; font-family: serif; }
+        .app-header h1 { font-size: 20px; font-weight: 700; margin-top: 2px; letter-spacing: 0.5px; }
+        .app-header p { font-size: 11px; opacity: 0.85; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--accent-gold); }
+        
+        /* Tab Content */
+        .tab-content { display: none; padding: 18px; animation: fadeIn 0.3s ease-in-out; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* அடிப்படையான கார்டு ஸ்டைல்கள் */
-        .card { background: #fff; border-radius: 8px; padding: 12px; margin-bottom: 12px; border-left: 5px solid #D4AF37; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee; position: relative; transition: all 0.3s ease; }
-        .card h3 { color: #003366; margin-bottom: 6px; font-size: 15px; }
-        .card p, .card ul, .card ol { font-size: 13px; color: #555; line-height: 1.5; }
-        .card ul, .card ol { padding-left: 18px; }
+        .section-header { font-size: 17px; color: var(--primary-blue); font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--accent-gold); padding-left: 10px; }
 
-        /* கார்டு மாடல்கள் (Styles) */
-        .card.style-classic { border-left-width: 6px; border-radius: 4px; }
-        .card.style-rounded { border-radius: 16px; border-left-width: 5px; }
-        .card.style-shadow { border-radius: 10px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-left-width: 5px; }
-        .card.style-flat { border: 2px solid #D4AF37; border-radius: 6px; box-shadow: none; }
-        
-        .badge { display: inline-block; background: #D4AF37; color: #003366; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-bottom: 5px; }
-        
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-size: 12px; font-weight: bold; color: #003366; margin-bottom: 4px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
-        
-        .btn { width: 100%; background: #003366; color: #fff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px; text-align: center; display: inline-block; text-decoration: none; }
-        .btn-gold { background: #D4AF37; color: #003366; }
+        /* Card Styles */
+        .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: var(--shadow-sm); position: relative; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .card h3 { color: var(--primary-blue); margin-bottom: 6px; font-size: 16px; font-weight: 700; }
+        .card p, .card ul, .card ol { font-size: 13.5px; color: #475569; line-height: 1.6; }
+        .card ul, .card ol { padding-left: 20px; }
 
-        .service-card { border-left-color: #4CAF50; margin-bottom: 15px; }
-        .account-box { background: rgba(0,0,0,0.02); border: 1px solid #e9ecef; border-radius: 6px; padding: 10px; margin-top: 10px; }
-        .account-box h4 { font-size: 12px; color: #003366; margin-bottom: 6px; }
+        /* Card Variants */
+        .card.style-classic { border-left: 5px solid var(--accent-gold); }
+        .card.style-rounded { border-radius: 20px; border-left: 5px solid var(--accent-gold); }
+        .card.style-shadow { border-radius: var(--radius-md); box-shadow: var(--shadow-md); border-left: 5px solid var(--accent-gold); }
+        .card.style-flat { border: 2px solid var(--accent-gold); box-shadow: none; }
         
-        .account-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px; }
-        .account-table th, .account-table td { border: 1px solid #dee2e6; padding: 4px 6px; text-align: left; }
-        .account-table th { background: #e9ecef; color: #333; }
-        .total-row { font-weight: bold; background: #e2e3e5; color: #003366; }
+        .badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: #856404; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(212, 175, 55, 0.3); }
+        .badge-blue { background: rgba(10, 25, 47, 0.08); color: var(--primary-blue); border-color: rgba(10, 25, 47, 0.2); }
+        
+        /* Form Inputs */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--primary-blue); margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 13px; outline: none; transition: border-color 0.2s; background: #F8FAFC; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-gold); background: #FFF; }
+        
+        /* Buttons */
+        .btn { width: 100%; background: var(--primary-blue); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; text-align: center; display: inline-block; text-decoration: none; transition: background 0.2s; box-shadow: 0 4px 12px rgba(10, 25, 47, 0.15); }
+        .btn:hover { background: #1E293B; }
+        .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #B59226 100%); color: #0A192F; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25); }
+        .btn-gold:hover { background: linear-gradient(135deg, #C49F27 0%, #A58216 100%); }
 
-        .action-bar { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
-        .btn-sm { padding: 4px 7px; font-size: 11px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-flex; align- items: center; gap: 3px; cursor: pointer; border: none; }
-        .btn-pdf { background: #e74c3c; color: #fff; }
-        .btn-img { background: #2196F3; color: #fff; }
-        .btn-edit { background: #ff9800; color: #fff; }
-        .btn-delete { background: #dc3545; color: #fff; }
-        .btn-move { background: #6c757d; color: #fff; }
-        .btn-style { background: #9c27b0; color: #fff; }
+        .account-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-top: 10px; }
+        .account-box h4 { font-size: 13px; color: var(--primary-blue); margin-bottom: 8px; font-weight: 700; }
+        
+        .account-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 8px; }
+        .account-table th, .account-table td { border: 1px solid #E2E8F0; padding: 6px 8px; text-align: left; }
+        .account-table th { background: #E2E8F0; color: #334155; font-weight: 700; }
+        .total-row { font-weight: 700; background: #FEF08A; color: #854D0E; }
 
-        .add-service-card { border-left-color: #2196F3; background: #f0f7ff; }
-        .sub-item-row { display: flex; gap: 5px; margin-bottom: 5px; align-items: center; }
+        /* Action Buttons */
+        .action-bar { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
+        .btn-sm { padding: 5px 9px; font-size: 11px; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; border: none; }
+        .btn-pdf { background: #EF4444; color: #fff; }
+        .btn-img { background: #3B82F6; color: #fff; }
+        .btn-edit { background: #F59E0B; color: #fff; }
+        .btn-delete { background: #DC2626; color: #fff; }
+        .btn-move { background: #64748B; color: #fff; }
+        .btn-style { background: #8B5CF6; color: #fff; }
+
+        .add-service-card { border-left-color: #3B82F6; background: #F0F9FF; border: 1.5px dashed #93C5FD; }
+        .sub-item-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
         .sub-item-row input[type="text"] { flex: 2; }
         .sub-item-row input[type="number"] { flex: 1; }
-        .btn-remove-row { background: #dc3545; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; }
+        .btn-remove-row { background: #EF4444; color: #fff; border: none; padding: 8px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; }
 
-        /* 🔒 ADMIN ONLY CONTROLS - (இயல்புநிலையில் மறைக்கப்பட்டிருக்கும்) */
+        /* Admin Controls */
         .admin-only { display: none !important; }
         body.admin-mode .admin-only { display: flex !important; }
         body.admin-mode div.admin-only { display: block !important; }
 
-        .admin-login-bar { text-align: center; padding: 8px; background: #f8f9fa; border-top: 1px solid #ddd; margin-bottom: 10px; }
-        .admin-toggle-btn { background: none; border: none; color: #888; font-size: 11px; cursor: pointer; }
+        .admin-login-bar { text-align: center; padding: 10px; background: #E2E8F0; border-top: 1px solid #CBD5E1; margin-top: 20px; }
+        .admin-toggle-btn { background: none; border: none; color: #475569; font-size: 12px; cursor: pointer; font-weight: 700; }
 
-        .admin-controls-fixed { position: fixed; bottom: 75px; right: 10px; display: flex; gap: 5px; z-index: 99; }
-        .admin-btn-style { background: #003366; color: #D4AF37; border: 1px solid #D4AF37; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 440px; background: var(--primary-blue); display: flex; justify-content: space-around; padding: 10px 0; border-top: 2.5px solid var(--accent-gold); z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
+        .nav-item { color: #94A3B8; text-decoration: none; font-size: 11px; text-align: center; cursor: pointer; flex: 1; transition: color 0.2s; }
+        .nav-item.active { color: var(--accent-gold); font-weight: 700; }
+        .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
-        .modal img { max-width: 90%; max-height: 80%; border-radius: 8px; }
-        .modal-close { position: absolute; top: 20px; right: 25px; color: #fff; font-size: 30px; font-weight: bold; cursor: pointer; }
+        .date-time-tag { font-size: 11px; color: #94A3B8; margin-top: 6px; font-style: italic; display: block; }
+        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 6px 0; border-bottom: 1px dashed #E2E8F0; font-size: 13.5px; }
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 420px; background: #003366; display: flex; justify-content: space-around; padding: 8px 0; border-top: 2px solid #D4AF37; z-index: 100; }
-        .nav-item { color: #fff; text-decoration: none; font-size: 10px; text-align: center; opacity: 0.7; cursor: pointer; flex: 1; }
-        .nav-item.active { opacity: 1; color: #D4AF37; font-weight: bold; }
-        .nav-icon { font-size: 16px; display: block; margin-bottom: 2px; }
-
-        .date-time-tag { font-size: 11px; color: #888; margin-top: 4px; font-style: italic; display: block; }
-        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dashed #eee; }
+        /* Payment Method Options */
+        .payment-options { display: flex; gap: 8px; margin-bottom: 12px; }
+        .payment-option { flex: 1; border: 1.5px solid #CBD5E1; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary-blue); background: #F8FAFC; transition: all 0.2s; }
+        .payment-option.selected { border-color: var(--accent-gold); background: #FEF08A; color: #854D0E; }
     </style>
 </head>
 <body>
@@ -97,10 +127,10 @@
         <p>AL MUEEN TRUST</p>
     </div>
 
-    <!-- 1. முகப்பு -->
+    <!-- 1. முகப்பு (Home) -->
     <div id="home" class="tab-content active">
         <div class="card add-service-card admin-only">
-            <span class="badge" style="background:#003366; color:#fff;">➕ புதிய முகப்பு பாக்ஸ் சேர்க்க</span>
+            <span class="badge" style="background:var(--primary-blue); color:#fff;">➕ புதிய முகப்பு பாக்ஸ் சேர்க்க</span>
             <div class="form-group" style="margin-top:5px;">
                 <label>தலைப்பு:</label>
                 <input type="text" id="homeTitleInput" placeholder="எ.கா: அறக்கட்டளை செய்தி">
@@ -140,13 +170,13 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-gold" onclick="switchTab('donate')">நன்கொடை அளிக்க 💳</button>
+        <button class="btn btn-gold" onclick="switchTabDirect('donate')">நன்கொடை அளிக்க 💳</button>
     </div>
 
-    <!-- 2. நிர்வாகிகள் -->
+    <!-- 2. நிர்வாகிகள் (Team) -->
     <div id="team" class="tab-content">
         <div class="card add-service-card admin-only">
-            <span class="badge" style="background:#003366; color:#fff;">➕ புதிய நிர்வாகி பாக்ஸ் சேர்க்க</span>
+            <span class="badge" style="background:var(--primary-blue); color:#fff;">➕ புதிய நிர்வாகி பாக்ஸ் சேர்க்க</span>
             <div class="form-group" style="margin-top:5px;">
                 <label>பதவி பெயர் (Badge):</label>
                 <input type="text" id="teamRoleInput" placeholder="எ.கா: செயற்குழு உறுப்பினர்">
@@ -265,7 +295,6 @@
                 </div>
             </div>
 
-            <!-- எண்களுடன் கூடிய எடிட் வசதி கொண்ட செயற்குழு உறுப்பினர்கள் பாக்ஸ் -->
             <div class="card style-classic" id="team-8">
                 <span class="badge role-text">நிர்வாகக் குழு உறுப்பினர்கள்</span>
                 <h3 class="name-text">செயற்குழு உறுப்பினர்கள் பட்டியல்</h3>
@@ -359,28 +388,39 @@
         </div>
     </div>
 
-    <!-- 3. சேவைகள் & கணக்கு வழக்குகள் -->
+    <!-- 3. சேவைகள் & திட்டங்கள் (Services & Projects - Single Tab) -->
     <div id="projects" class="tab-content">
-        <h2 style="font-size:16px; color:#003366; margin-bottom:10px;">நிறைவேற்றப்பட்ட சேவைகள் & கணக்குகள்</h2>
+        <div class="section-header">
+            <span>சேவைகள் & எதிர்கால திட்டங்கள்</span>
+        </div>
 
+        <!-- Add Service / Project Admin Form -->
         <div class="card add-service-card admin-only" id="formCard">
-            <span class="badge" id="formBadge" style="background:#003366; color:#fff;">➕ புதிய சேவை சேர்க்க</span>
-            <h3 style="margin-top:5px;" id="formTitle">சேவை மற்றும் கணக்கு விவரங்களை உள்ளிடவும்</h3>
+            <span class="badge" id="formBadge" style="background:var(--primary-blue); color:#fff;">➕ புதிய சேவை / திட்டம் சேர்க்க</span>
+            <h3 style="margin-top:5px;" id="formTitle">விவரங்களை உள்ளிடவும்</h3>
             
             <input type="hidden" id="editCardId" value="">
 
             <div class="form-group" style="margin-top:8px;">
-                <label>சேவையின் பெயர்:</label>
+                <label>வகை:</label>
+                <select id="itemType">
+                    <option value="service">நிறைவேற்றப்பட்ட சேவை</option>
+                    <option value="future">எதிர்கால திட்டம்</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>தலைப்பு:</label>
                 <input type="text" id="newTitle" placeholder="எ.கா: இலவச மருத்துவ முகாம்">
             </div>
             
             <div class="form-group">
                 <label>விவரம்:</label>
-                <textarea id="newDesc" rows="2" placeholder="சேவை பற்றிய சிறு விளக்கம்..."></textarea>
+                <textarea id="newDesc" rows="2" placeholder="சிறு விளக்கம்..."></textarea>
             </div>
 
-            <div class="form-group">
-                <label>செலவு விவரங்கள்:</label>
+            <div class="form-group" id="costDetailsGroup">
+                <label>செலவு விவரங்கள் (சேவைகளுக்கு மட்டும்):</label>
                 <div id="subItemsContainer">
                     <div class="sub-item-row">
                         <input type="text" class="item-name" placeholder="செலவு பெயர் (எ.கா: மருந்து)">
@@ -390,32 +430,14 @@
                 </div>
                 <button type="button" class="btn-sm btn-img" onclick="addSubItemRow()" style="margin-top:5px;">➕ செலவு வரிசை சேர்க்க</button>
             </div>
-            <button class="btn btn-gold" onclick="saveServiceCard()">சேமிக்க (Save Card)</button>
+            <button class="btn btn-gold" onclick="saveServiceCard()">சேமிக்க (Save)</button>
         </div>
 
-        <div id="projectsContainer"></div>
-    </div>
-
-    <!-- 4. எதிர்கால திட்டங்கள் (Future Projects) -->
-    <div id="future" class="tab-content">
-        <h2 style="font-size:16px; color:#003366; margin-bottom:10px;">எதிர்கால திட்டங்கள்</h2>
-        
-        <div class="card add-service-card admin-only">
-            <span class="badge" style="background:#003366; color:#fff;">➕ புதிய திட்டம் சேர்க்க</span>
-            <div class="form-group" style="margin-top:5px;">
-                <label>திட்டத்தின் பெயர்:</label>
-                <input type="text" id="futureTitleInput" placeholder="எ.கா: சொந்தக் கட்டடம் அமைப்பு">
-            </div>
-            <div class="form-group">
-                <label>திட்ட விவரம்:</label>
-                <textarea id="futureDescInput" rows="3" placeholder="திட்டம் பற்றிய விவரிக்கவும்..."></textarea>
-            </div>
-            <button class="btn btn-gold" onclick="addFutureProject()">திட்டத்தை சேர்க்க</button>
-        </div>
-
-        <div id="futureProjectsContainer">
+        <!-- Combined Container -->
+        <div id="projectsContainer">
+            <!-- Future Project Sample -->
             <div class="card style-classic" id="future-1">
-                <span class="badge" style="background:#2196F3; color:#fff;">திட்டம் 1</span>
+                <span class="badge badge-blue">🎯 எதிர்கால திட்டம் 1</span>
                 <h3 class="card-title-text">இலவச கல்வி மையம் நிறுவுதல்</h3>
                 <p class="card-desc-text">மாணவர்களுக்கு மாலை நேர இலவச சிறப்புப் பயிற்சி வகுப்புகள் மற்றும் வழிகாட்டல் மையம் அமைத்தல்.</p>
                 <div class="action-bar admin-only">
@@ -429,12 +451,14 @@
         </div>
     </div>
 
-    <!-- 5. ஆலோசனைகள் / கருத்துக்கள் (Feedback with Auto Date & Time) -->
+    <!-- 4. ஆலோசனைகள் (Feedback) -->
     <div id="feedback" class="tab-content">
-        <h2 style="font-size:16px; color:#003366; margin-bottom:10px;">உங்கள் கருத்துக்கள் & ஆலோசனைகள்</h2>
+        <div class="section-header">
+            <span>ஆலோசனைகள் & கருத்துக்கள்</span>
+        </div>
         
         <div class="card add-service-card">
-            <span class="badge" style="background:#003366; color:#fff;">📝 புதிய ஆலோசனை பதிவு செய்ய</span>
+            <span class="badge" style="background:var(--primary-blue); color:#fff;">📝 புதிய ஆலோசனை பதிவு செய்ய</span>
             <div class="form-group" style="margin-top:5px;">
                 <label>உங்கள் பெயர்:</label>
                 <input type="text" id="feedbackNameInput" placeholder="உங்கள் பெயர்">
@@ -458,8 +482,48 @@
         </div>
     </div>
 
-    <!-- 6. நன்கொடை (Donate) -->
+    <!-- 5. நன்கொடை (Donate with Payment Option) -->
     <div id="donate" class="tab-content">
+        <div class="section-header">
+            <span>நன்கொடை செலுத்தும் படிவம்</span>
+        </div>
+
+        <!-- Donation Form -->
+        <div class="card style-classic" style="border-left-color: var(--success-green);">
+            <h3 style="color:var(--primary-blue); margin-bottom:10px;">அறக்கட்டளைக்கு நிதி உதவி வழங்க</h3>
+            
+            <div class="form-group">
+                <label>உங்கள் பெயர் / Name *</label>
+                <input type="text" id="donorName" placeholder="முழு பெயர்">
+            </div>
+
+            <div class="form-group">
+                <label>மொபைல் எண் / Mobile No *</label>
+                <input type="tel" id="donorPhone" placeholder="9876543210">
+            </div>
+
+            <div class="form-group">
+                <label>நன்கொடைத் தொகை / Amount (₹) *</label>
+                <input type="number" id="donorAmount" placeholder="1000">
+            </div>
+
+            <div class="form-group">
+                <label>பணம் செலுத்தும் முறை / Payment Mode *</label>
+                <div class="payment-options">
+                    <div class="payment-option selected" onclick="selectPaymentMode(this, 'upi')">💳 UPI / GPay</div>
+                    <div class="payment-option" onclick="selectPaymentMode(this, 'bank')">🏦 Bank Transfer</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>குறிப்பு / Note (விருப்பப்பட்டால்)</label>
+                <input type="text" id="donorNote" placeholder="கல்வி / மருத்துவ உதவிக்காக...">
+            </div>
+
+            <button class="btn btn-gold" onclick="processDonation()">உடனே நன்கொடை அளிக்க (Pay Now) 💳</button>
+        </div>
+
+        <!-- Account Details -->
         <div class="card style-classic">
             <h3>வங்கிக் கணக்கு விவரங்கள்</h3>
             <p><b>வங்கி:</b> ICICI Bank</p>
@@ -467,9 +531,11 @@
             <p><b>IFSC:</b> ICIC0001234</p>
             <p><b>கிளை:</b> சென்னை</p>
         </div>
+
         <div class="card style-classic">
-            <h3>UPI மூலம் அனுப்ப</h3>
-            <p><b>GPay / PhonePe / Paytm:</b> 9444648516@upi</p>
+            <h3>UPI மூலம் நேரடியாக செலுத்த</h3>
+            <p><b>GPay / PhonePe / Paytm UPI:</b></p>
+            <p style="font-weight:700; color:var(--primary-blue); font-size:15px; margin-top:4px;">9444648516@upi</p>
         </div>
     </div>
 
@@ -480,23 +546,25 @@
 
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('home')"><span class="nav-icon">🏠</span>முகப்பு</div>
-        <div class="nav-item" onclick="switchTab('team')"><span class="nav-icon">👥</span>நிர்வாகிகள்</div>
-        <div class="nav-item" onclick="switchTab('projects')"><span class="nav-icon">📊</span>சேவைகள்</div>
-        <div class="nav-item" onclick="switchTab('future')"><span class="nav-icon">🎯</span>திட்டங்கள்</div>
-        <div class="nav-item" onclick="switchTab('feedback')"><span class="nav-icon">💬</span>ஆலோசனை</div>
+        <div class="nav-item active" onclick="switchTab(this, 'home')"><span class="nav-icon">🏠</span>முகப்பு</div>
+        <div class="nav-item" onclick="switchTab(this, 'team')"><span class="nav-icon">👥</span>நிர்வாகிகள்</div>
+        <div class="nav-item" onclick="switchTab(this, 'projects')"><span class="nav-icon">📊</span>சேவைகள் & திட்டங்கள்</div>
+        <div class="nav-item" onclick="switchTab(this, 'feedback')"><span class="nav-icon">💬</span>ஆலோசனை</div>
+        <div class="nav-item" onclick="switchTab(this, 'donate')"><span class="nav-icon">💳</span>நன்கொடை</div>
     </div>
 </div>
 
 <script>
-    // Admin Toggle System
+    let selectedPaymentType = 'upi';
+
+    // Admin Toggle
     function toggleAdminMode() {
         if(document.body.classList.contains('admin-mode')) {
             document.body.classList.remove('admin-mode');
             alert("Admin Mode வெளியேறப்பட்டது.");
         } else {
             let pwd = prompt("Admin Password உள்ளிடவும்:");
-            if(pwd === "1234") { // Admin Password
+            if(pwd === "1234") {
                 document.body.classList.add('admin-mode');
                 alert("Admin Mode செயல்படுத்தப்பட்டது!");
             } else {
@@ -505,13 +573,45 @@
         }
     }
 
-    // Tab switching
-    function switchTab(tabId) {
+    // Tab Switching
+    function switchTab(element, tabId) {
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         
         document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
+        if(element) element.classList.add('active');
+    }
+
+    function switchTabDirect(tabId) {
+        let navItems = document.querySelectorAll('.nav-item');
+        let tabIndex = ['home', 'team', 'projects', 'feedback', 'donate'].indexOf(tabId);
+        switchTab(navItems[tabIndex], tabId);
+    }
+
+    // Payment Mode Selector
+    function selectPaymentMode(el, mode) {
+        document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedPaymentType = mode;
+    }
+
+    // Donation Processor
+    function processDonation() {
+        let name = document.getElementById('donorName').value.trim();
+        let phone = document.getElementById('donorPhone').value.trim();
+        let amount = document.getElementById('donorAmount').value.trim();
+
+        if(!name || !phone || !amount) {
+            alert("தயவுசெய்து பெயர், மொபைல் எண் மற்றும் தொகையை உள்ளிடவும்!");
+            return;
+        }
+
+        if(selectedPaymentType === 'upi') {
+            let upiUrl = `upi://pay?pa=9444648516@upi&pn=AlMueenTrust&am=${amount}&cu=INR&tn=Donation from ${encodeURIComponent(name)}`;
+            window.location.href = upiUrl;
+        } else {
+            alert(`நன்றி ${name}! தயவுசெய்து கீழே குறிப்பிடப்பட்டுள்ள வங்கிக் கணக்கிற்கு ₹${amount} தொகையை அனுப்பி, ரசீதை அறக்கட்டளைக்கு அனுப்பவும்.`);
+        }
     }
 
     // Dynamic Card Controls
@@ -545,7 +645,7 @@
         card.classList.add(styles[nextIndex]);
     }
 
-    // Home Card Functions
+    // Home Functions
     function addHomeCard() {
         let title = document.getElementById('homeTitleInput').value;
         let desc = document.getElementById('homeDescInput').value;
@@ -646,30 +746,47 @@
         renumberCommitteeMembers();
     }
 
-    // Future Projects Functions
-    function addFutureProject() {
-        let title = document.getElementById('futureTitleInput').value;
-        let desc = document.getElementById('futureDescInput').value;
-        if(!title) return alert("திட்டத்தின் தலைப்பை உள்ளிடவும்!");
+    // Projects & Services Functions
+    function addSubItemRow() {
+        let row = `
+            <div class="sub-item-row">
+                <input type="text" class="item-name" placeholder="செலவு பெயர் (எ.கா: மருந்து)">
+                <input type="number" class="item-cost" placeholder="தொகை (₹)">
+                <button type="button" class="btn-remove-row" onclick="removeSubItemRow(this)">✖</button>
+            </div>`;
+        document.getElementById('subItemsContainer').insertAdjacentHTML('beforeend', row);
+    }
 
-        let id = 'future-' + Date.now();
-        let count = document.querySelectorAll('#futureProjectsContainer .card').length + 1;
+    function removeSubItemRow(btn) {
+        btn.parentElement.remove();
+    }
+
+    function saveServiceCard() {
+        let type = document.getElementById('itemType').value;
+        let title = document.getElementById('newTitle').value.trim();
+        let desc = document.getElementById('newDesc').value.trim();
+
+        if(!title) return alert("தலைப்பை உள்ளிடவும்!");
+
+        let id = 'item-' + Date.now();
+        let badgeHtml = type === 'future' ? `<span class="badge badge-blue">🎯 எதிர்கால திட்டம்</span>` : `<span class="badge" style="background:var(--success-green); color:#fff;">✅ நிறைவுற்ற சேவை</span>`;
+        
         let html = `
             <div class="card style-classic" id="${id}">
-                <span class="badge" style="background:#2196F3; color:#fff;">திட்டம் ${count}</span>
+                ${badgeHtml}
                 <h3 class="card-title-text">${title}</h3>
                 <p class="card-desc-text">${desc}</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('${id}')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('${id}')">⬇️ கீழே</button>
                     <button class="btn-sm btn-style" onclick="customizeCardStyle('${id}')">🎨 ஸ்டைல்</button>
-                    <button class="btn-sm btn-edit" onclick="editFutureProject('${id}')">✏️ எடிட்</button>
                     <button class="btn-sm btn-delete" onclick="deleteCard('${id}')">🗑️ நீக்கு</button>
                 </div>
             </div>`;
-        document.getElementById('futureProjectsContainer').insertAdjacentHTML('beforeend', html);
-        document.getElementById('futureTitleInput').value = '';
-        document.getElementById('futureDescInput').value = '';
+
+        document.getElementById('projectsContainer').insertAdjacentHTML('beforeend', html);
+        document.getElementById('newTitle').value = '';
+        document.getElementById('newDesc').value = '';
     }
 
     function editFutureProject(id) {
@@ -684,14 +801,14 @@
         if(newDesc !== null) card.querySelector('.card-desc-text').innerText = newDesc;
     }
 
-    // Feedback with Auto Date and Time
+    // Feedback
     function addFeedback() {
         let name = document.getElementById('feedbackNameInput').value || 'பெயர் குறிப்பிடப்படாதவர்';
         let text = document.getElementById('feedbackTextInput').value;
         if(!text) return alert("உங்கள் கருத்தை உள்ளிடவும்!");
 
         let now = new Date();
-        let dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY
+        let dateStr = now.toLocaleDateString('en-GB');
         let timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
         let id = 'feedback-' + Date.now();
@@ -707,21 +824,6 @@
         document.getElementById('feedbackContainer').insertAdjacentHTML('afterbegin', html);
         document.getElementById('feedbackNameInput').value = '';
         document.getElementById('feedbackTextInput').value = '';
-    }
-
-    // Sub-items for Service Card
-    function addSubItemRow() {
-        let row = `
-            <div class="sub-item-row">
-                <input type="text" class="item-name" placeholder="செலவு பெயர் (எ.கா: மருந்து)">
-                <input type="number" class="item-cost" placeholder="தொகை (₹)">
-                <button type="button" class="btn-remove-row" onclick="removeSubItemRow(this)">✖</button>
-            </div>`;
-        document.getElementById('subItemsContainer').insertAdjacentHTML('beforeend', row);
-    }
-
-    function removeSubItemRow(btn) {
-        btn.parentElement.remove();
     }
 </script>
 
