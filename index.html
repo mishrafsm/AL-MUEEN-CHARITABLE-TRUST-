@@ -10,79 +10,88 @@
     <link href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #0A192F;
+            --primary-blue: #0B192C;
+            --primary-light: #1E3E62;
             --accent-gold: #D4AF37;
-            --accent-gold-hover: #B59226;
-            --bg-light: #F4F6F9;
-            --card-bg: #FFFFFF;
-            --text-dark: #1E293B;
-            --text-muted: #64748B;
+            --accent-gold-hover: #F1C40F;
+            --bg-light: #0D1B2A; /* Dark theme background matching the glowing look */
+            --card-bg: #112233;  /* Dark card background for high contrast glow */
+            --text-dark: #E2E8F0;
+            --text-muted: #94A3B8;
             --success-green: #10B981;
             --danger-red: #EF4444;
-            --radius-md: 12px;
-            --radius-lg: 18px;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --shadow-gold: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Mukta Malar', 'Poppins', sans-serif; }
-        body { background-color: #0F172A; color: var(--text-dark); display: flex; justify-content: center; min-height: 100vh; }
+        body { background-color: #060E18; color: var(--text-dark); display: flex; justify-content: center; min-height: 100vh; }
         
-        .app-container { width: 100%; max-width: 440px; background: var(--bg-light); min-height: 100vh; box-shadow: 0 0 30px rgba(0,0,0,0.3); position: relative; padding-bottom: 90px; }
+        .app-container { width: 100%; max-width: 440px; background: var(--bg-light); min-height: 100vh; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; padding-bottom: 100px; overflow-x: hidden; }
         
-        /* App Header */
-        .app-header { background: linear-gradient(135deg, #0A192F 0%, #1E293B 100%); color: #fff; padding: 25px 20px 20px; text-align: center; border-bottom: 3px solid var(--accent-gold); position: relative; overflow: hidden; }
-        .app-header::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(212,175,55,0.15), transparent 70%); pointer-events: none; }
-        .arabic-title { color: var(--accent-gold); font-size: 26px; font-weight: 700; letter-spacing: 1px; font-family: serif; }
-        .app-header h1 { font-size: 20px; font-weight: 700; margin-top: 2px; letter-spacing: 0.5px; }
-        .app-header p { font-size: 11px; opacity: 0.85; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--accent-gold); }
+        /* App Header - High Class Styling with Profile Image */
+        .app-header { background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%); color: #fff; padding: 25px 20px 20px; text-align: center; border-bottom: 4px solid var(--accent-gold); position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; }
+        .app-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(212,175,55,0.1); border-radius: 50%; pointer-events: none; }
+        .app-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); }
+        
+        /* Header Profile Image Style */
+        .header-profile-img { width: 75px; height: 75px; border-radius: 50%; border: 2.5px solid var(--accent-gold); object-fit: cover; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); flex-shrink: 0; background: #fff; }
+        .header-text-box { text-align: left; flex: 1; }
+
+        .arabic-title { color: var(--accent-gold); font-size: 22px; font-weight: 700; letter-spacing: 1px; font-family: serif; text-shadow: 0 2px 8px rgba(212,175,55,0.3); margin-bottom: 2px; }
+        .app-header h1 { font-size: 18px; font-weight: 700; margin-top: 2px; letter-spacing: 0.5px; color: #FFFFFF; }
+        .app-header p { font-size: 10.5px; opacity: 0.9; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--accent-gold); margin-top: 4px; }
         
         /* Tab Content */
-        .tab-content { display: none; padding: 18px; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content { display: none; padding: 20px; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .section-header { font-size: 17px; color: var(--primary-blue); font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--accent-gold); padding-left: 10px; }
+        .section-header { font-size: 18px; color: var(--accent-gold); font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--accent-gold); padding-left: 12px; background: linear-gradient(90deg, rgba(212,175,55,0.15), transparent); padding-top: 6px; padding-bottom: 6px; border-radius: 0 8px 8px 0; }
 
-        /* Card Styles */
-        .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: var(--shadow-sm); position: relative; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .card h3 { color: var(--primary-blue); margin-bottom: 6px; font-size: 16px; font-weight: 700; }
-        .card p, .card ul, .card ol { font-size: 13.5px; color: #475569; line-height: 1.6; }
+        /* Card Styles - Glowing Light Border Effect (As requested) */
+        .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; border: 1.5px solid rgba(212, 175, 55, 0.35); box-shadow: 0 0 12px rgba(212, 175, 55, 0.15), inset 0 0 10px rgba(212, 175, 55, 0.05); position: relative; transition: all 0.3s ease; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.1); border-color: var(--accent-gold); }
+        .card h3 { color: var(--accent-gold); margin-bottom: 8px; font-size: 16.5px; font-weight: 700; letter-spacing: 0.3px; }
+        .card p, .card ul, .card ol { font-size: 14px; color: #CBD5E1; line-height: 1.7; }
         .card ul, .card ol { padding-left: 20px; }
 
-        /* Card Variants */
+        /* Card Variants with Glowing Highlights */
         .card.style-classic { border-left: 5px solid var(--accent-gold); }
-        .card.style-rounded { border-radius: 20px; border-left: 5px solid var(--accent-gold); }
-        .card.style-shadow { border-radius: var(--radius-md); box-shadow: var(--shadow-md); border-left: 5px solid var(--accent-gold); }
-        .card.style-flat { border: 2px solid var(--accent-gold); box-shadow: none; }
+        .card.style-rounded { border-radius: 24px; border-left: 5px solid var(--accent-gold); }
+        .card.style-shadow { border-radius: var(--radius-md); box-shadow: 0 0 25px rgba(212, 175, 55, 0.25); border-left: 5px solid var(--accent-gold); }
+        .card.style-flat { border: 2px solid var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); background: #112233; }
         
-        .badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: #856404; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(212, 175, 55, 0.3); }
-        .badge-blue { background: rgba(10, 25, 47, 0.08); color: var(--primary-blue); border-color: rgba(10, 25, 47, 0.2); }
+        .badge { display: inline-block; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.35)); color: #FACC15; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(212, 175, 55, 0.5); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
+        .badge-blue { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.35)); color: #60A5FA; border-color: rgba(59, 130, 246, 0.5); box-shadow: 0 0 10px rgba(59,130,246,0.2); }
         
-        /* Form Inputs */
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--primary-blue); margin-bottom: 5px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 13px; outline: none; transition: border-color 0.2s; background: #F8FAFC; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-gold); background: #FFF; }
+        /* Form Inputs - Clean & Glowing */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12.5px; font-weight: 700; color: var(--accent-gold); margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; border: 1.5px solid rgba(212, 175, 55, 0.3); border-radius: 10px; font-size: 13.5px; outline: none; transition: all 0.3s ease; background: #0A1522; color: #FFFFFF; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-gold); background: #112233; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
         
-        /* Buttons */
-        .btn { width: 100%; background: var(--primary-blue); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; text-align: center; display: inline-block; text-decoration: none; transition: background 0.2s; box-shadow: 0 4px 12px rgba(10, 25, 47, 0.15); }
-        .btn:hover { background: #1E293B; }
-        .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #B59226 100%); color: #0A192F; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25); }
-        .btn-gold:hover { background: linear-gradient(135deg, #C49F27 0%, #A58216 100%); }
+        /* Buttons - High Class Gradients */
+        .btn { width: 100%; background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%); color: #fff; border: 1px solid rgba(212, 175, 55, 0.4); padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14.5px; text-align: center; display: inline-block; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(11, 25, 44, 0.2); }
+        .btn:hover { background: linear-gradient(135deg, #1E3E62 0%, #0B192C 100%); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3); }
+        .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%); color: #0B192C; box-shadow: var(--shadow-gold); border: none; }
+        .btn-gold:hover { background: linear-gradient(135deg, #E5C158 0%, #C49F27 100%); transform: translateY(-2px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
 
-        .account-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-top: 10px; }
-        .account-box h4 { font-size: 13px; color: var(--primary-blue); margin-bottom: 8px; font-weight: 700; }
+        .account-box { background: #112233; border: 1.5px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 14px; margin-top: 12px; box-shadow: 0 0 10px rgba(212,175,55,0.1); }
+        .account-box h4 { font-size: 13.5px; color: var(--accent-gold); margin-bottom: 10px; font-weight: 700; }
         
-        .account-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 8px; }
-        .account-table th, .account-table td { border: 1px solid #E2E8F0; padding: 6px 8px; text-align: left; }
-        .account-table th { background: #E2E8F0; color: #334155; font-weight: 700; }
-        .total-row { font-weight: 700; background: #FEF08A; color: #854D0E; }
+        .account-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 10px; }
+        .account-table th, .account-table td { border: 1px solid rgba(212, 175, 55, 0.2); padding: 8px 10px; text-align: left; color: #CBD5E1; }
+        .account-table th { background: #1E3E62; color: var(--accent-gold); font-weight: 700; }
+        .total-row { font-weight: 700; background: rgba(212, 175, 55, 0.2); color: #FACC15; }
 
         /* Action Buttons */
-        .action-bar { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
-        .btn-sm { padding: 5px 9px; font-size: 11px; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; border: none; }
+        .action-bar { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; border-top: 1px dashed rgba(212, 175, 55, 0.3); padding-top: 10px; }
+        .btn-sm { padding: 6px 10px; font-size: 11.5px; border-radius: 8px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; border: none; transition: all 0.2s; }
+        .btn-sm:hover { transform: translateY(-1px); opacity: 0.9; }
         .btn-pdf { background: #EF4444; color: #fff; }
         .btn-img { background: #3B82F6; color: #fff; }
         .btn-edit { background: #F59E0B; color: #fff; }
@@ -90,41 +99,48 @@
         .btn-move { background: #64748B; color: #fff; }
         .btn-style { background: #8B5CF6; color: #fff; }
 
-        .add-service-card { border-left-color: #3B82F6; background: #F0F9FF; border: 1.5px dashed #93C5FD; }
-        .sub-item-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+        .add-service-card { border-left-color: #3B82F6; background: #0F1F30; border: 1.5px dashed rgba(59, 130, 246, 0.5); box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
+        .sub-item-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
         .sub-item-row input[type="text"] { flex: 2; }
         .sub-item-row input[type="number"] { flex: 1; }
-        .btn-remove-row { background: #EF4444; color: #fff; border: none; padding: 8px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; }
+        .btn-remove-row { background: #EF4444; color: #fff; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; transition: background 0.2s; }
+        .btn-remove-row:hover { background: #DC2626; }
 
         /* Admin Controls */
         .admin-only { display: none !important; }
         body.admin-mode .admin-only { display: flex !important; }
         body.admin-mode div.admin-only { display: block !important; }
 
-        .admin-login-bar { text-align: center; padding: 10px; background: #E2E8F0; border-top: 1px solid #CBD5E1; margin-top: 20px; }
-        .admin-toggle-btn { background: none; border: none; color: #475569; font-size: 12px; cursor: pointer; font-weight: 700; }
+        .admin-login-bar { text-align: center; padding: 14px; background: #0B192C; border-top: 1px solid rgba(212, 175, 55, 0.3); margin-top: 20px; }
+        .admin-toggle-btn { background: #112233; color: var(--accent-gold); border: 1.5px solid var(--accent-gold); padding: 8px 16px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 700; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); transition: all 0.2s; }
+        .admin-toggle-btn:hover { background: #1E3E62; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 440px; background: var(--primary-blue); display: flex; justify-content: space-around; padding: 10px 0; border-top: 2.5px solid var(--accent-gold); z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
-        .nav-item { color: #94A3B8; text-decoration: none; font-size: 11px; text-align: center; cursor: pointer; flex: 1; transition: color 0.2s; }
-        .nav-item.active { color: var(--accent-gold); font-weight: 700; }
+        /* Bottom Navigation - Floating Glassmorphism Style */
+        .bottom-nav { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); width: calc(100% - 24px); max-width: 416px; background: rgba(11, 25, 44, 0.95); backdrop-filter: blur(12px); display: flex; justify-content: space-around; padding: 10px 6px; border-radius: 20px; border: 1.5px solid rgba(212, 175, 55, 0.4); z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.2); }
+        .nav-item { color: #94A3B8; text-decoration: none; font-size: 11px; text-align: center; cursor: pointer; flex: 1; transition: all 0.3s ease; padding: 4px 0; border-radius: 12px; }
+        .nav-item.active { color: var(--accent-gold); font-weight: 700; background: rgba(212, 175, 55, 0.15); transform: translateY(-2px); text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); }
         .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
 
-        .date-time-tag { font-size: 11px; color: #94A3B8; margin-top: 6px; font-style: italic; display: block; }
-        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 6px 0; border-bottom: 1px dashed #E2E8F0; font-size: 13.5px; }
+        .date-time-tag { font-size: 11px; color: var(--text-muted); margin-top: 8px; font-style: italic; display: block; }
+        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px dashed rgba(212, 175, 55, 0.2); font-size: 14px; color: #CBD5E1; }
 
         /* Payment Method Options */
-        .payment-options { display: flex; gap: 8px; margin-bottom: 12px; }
-        .payment-option { flex: 1; border: 1.5px solid #CBD5E1; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary-blue); background: #F8FAFC; transition: all 0.2s; }
-        .payment-option.selected { border-color: var(--accent-gold); background: #FEF08A; color: #854D0E; }
+        .payment-options { display: flex; gap: 10px; margin-bottom: 14px; }
+        .payment-option { flex: 1; border: 1.5px solid rgba(212, 175, 55, 0.3); padding: 12px; border-radius: 10px; text-align: center; cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--accent-gold); background: #0A1522; transition: all 0.3s ease; }
+        .payment-option:hover { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+        .payment-option.selected { border-color: var(--accent-gold); background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.4)); color: #FACC15; box-shadow: 0 0 15px rgba(212,175,55,0.3); }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="app-header">
-        <div class="arabic-title">المعين المخلص</div>
-        <h1>அல் முயீன் அறக்கட்டளை</h1>
-        <p>AL MUEEN TRUST<br>JAMILABATH-PULICAT-THIRUVALLUR</p>
+        <img src="YOUR_IMAGE_URL" alt="Profile" class="header-profile-img">
+        <div class="header-text-box">
+            <div class="arabic-title">المعين المخلص</div>
+            <h1>அல் முயீன் அறக்கட்டளை</h1>
+            <p>AL MUEEN TRUST<br>JAMILABATH-PULICAT-THIRUVALLUR</p>
+        </div>
     </div>
 
     <!-- 1. முகப்பு (Home) -->
@@ -301,7 +317,7 @@
                 <div id="committeeMembersList" style="margin-top:10px;">
                     <div class="member-list-item" id="c-member-1">
                         <span>1. முஹம்மது ஷமீம் மன்பயீ</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-1')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-1')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-1')">✏️</button>
@@ -310,7 +326,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-2">
                         <span>2. மௌலவி அல்ஹாஃபிழ் முஹம்மது ஹிஷாம் நாஃபியீ</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-2')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-2')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-2')">✏️</button>
@@ -319,7 +335,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-3">
                         <span>3. அல் ஹாஃபிழ் குத்புத்தீன்</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-3')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-3')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-3')">✏️</button>
@@ -328,7 +344,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-4">
                         <span>4. அல் ஹாஃபிழ் முஹம்மது பிலால்</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-4')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-4')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-4')">✏️</button>
@@ -337,7 +353,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-5">
                         <span>5. அல் ஹாஃபிழ் முஹம்மது ஜரீர்</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-5')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-5')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-5')">✏️</button>
@@ -346,7 +362,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-6">
                         <span>6. அல் ஹாஃபிழ் இஃஜாஸ் அஹ்மது</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-6')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-6')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-6')">✏️</button>
@@ -355,7 +371,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-7">
                         <span>7. அத் தாலிப் அப்துல் ஹலீம்</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-7')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-7')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-7')">✏️</button>
@@ -364,7 +380,7 @@
                     </div>
                     <div class="member-list-item" id="c-member-8">
                         <span>8. அல் ஹாஃபிழ் உக்காஷ்</span>
-                        <div class="action-bar admin-only" style="margin:0;">
+                        <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                             <button class="btn-sm btn-move" onclick="moveMemberUp('c-member-8')">⬆️</button>
                             <button class="btn-sm btn-move" onclick="moveMemberDown('c-member-8')">⬇️</button>
                             <button class="btn-sm btn-edit" onclick="editMemberName('c-member-8')">✏️</button>
@@ -373,12 +389,12 @@
                     </div>
                 </div>
                 
-                <div class="admin-only" style="margin-top:10px; gap:5px;">
-                    <input type="text" id="newMemberNameInput" placeholder="புதிய உறுப்பினர் பெயர்" style="flex:1; padding:5px; border-radius:4px; border:1px solid #ccc; font-size:12px;">
+                <div class="admin-only" style="margin-top:12px; gap:8px; display:flex;">
+                    <input type="text" id="newMemberNameInput" placeholder="புதிய உறுப்பினர் பெயர்" style="flex:1; padding:10px; border-radius:8px; border:1px solid rgba(212,175,55,0.3); font-size:13px;">
                     <button class="btn-sm btn-pdf" onclick="addCommitteeMember()">➕ உறுப்பினர் சேர்</button>
                 </div>
 
-                <div class="action-bar admin-only" style="margin-top:10px;">
+                <div class="action-bar admin-only" style="margin-top:12px;">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-8')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-8')">⬇️ கீழே</button>
                     <button class="btn-sm btn-style" onclick="customizeCardStyle('team-8')">🎨 ஸ்டைல்</button>
@@ -388,16 +404,15 @@
         </div>
     </div>
 
-    <!-- 3. சேவைகள் & திட்டங்கள் (Services & Projects - Single Tab) -->
+    <!-- 3. சேவைகள் & திட்டங்கள் (Services & Projects) -->
     <div id="projects" class="tab-content">
         <div class="section-header">
             <span>சேவைகள் & எதிர்கால திட்டங்கள்</span>
         </div>
 
-        <!-- Add Service / Project Admin Form -->
         <div class="card add-service-card admin-only" id="formCard">
-            <span class="badge" id="formBadge" style="background:var(--primary-blue); color:#fff;">➕ புதிய சேவை / திட்டம் சேர்க்க</span>
-            <h3 style="margin-top:5px;" id="formTitle">விவரங்களை உள்ளிடவும்</h3>
+            <span class="badge badge-blue" id="formBadge">➕ புதிய சேவை / திட்டம் சேர்க்க</span>
+            <h3 style="margin-top:5px; color:#60A5FA;" id="formTitle">விவரங்களை உள்ளிடவும்</h3>
             
             <input type="hidden" id="editCardId" value="">
 
@@ -433,9 +448,7 @@
             <button class="btn btn-gold" onclick="saveServiceCard()">சேமிக்க (Save)</button>
         </div>
 
-        <!-- Combined Container -->
         <div id="projectsContainer">
-            <!-- Future Project Sample -->
             <div class="card style-classic" id="future-1">
                 <span class="badge badge-blue">🎯 எதிர்கால திட்டம் 1</span>
                 <h3 class="card-title-text">இலவச கல்வி மையம் நிறுவுதல்</h3>
@@ -457,7 +470,7 @@
             <span>ஆலோசனைகள் & கருத்துக்கள்</span>
         </div>
         
-        <div class="card add-service-card">
+        <div class="card add-service-card" style="border-left-color: var(--accent-gold);">
             <span class="badge" style="background:var(--primary-blue); color:#fff;">📝 புதிய ஆலோசனை பதிவு செய்ய</span>
             <div class="form-group" style="margin-top:5px;">
                 <label>உங்கள் பெயர்:</label>
@@ -482,15 +495,14 @@
         </div>
     </div>
 
-    <!-- 5. நன்கொடை (Donate with Payment Option) -->
+    <!-- 5. நன்கொடை (Donate) -->
     <div id="donate" class="tab-content">
         <div class="section-header">
             <span>நன்கொடை செலுத்தும் படிவம்</span>
         </div>
 
-        <!-- Donation Form -->
         <div class="card style-classic" style="border-left-color: var(--success-green);">
-            <h3 style="color:var(--primary-blue); margin-bottom:10px;">அறக்கட்டளைக்கு நிதி உதவி வழங்க</h3>
+            <h3 style="color:var(--success-green); margin-bottom:10px;">அறக்கட்டளைக்கு நிதி உதவி வழங்க</h3>
             
             <div class="form-group">
                 <label>உங்கள் பெயர் / Name *</label>
@@ -523,7 +535,6 @@
             <button class="btn btn-gold" onclick="processDonation()">உடனே நன்கொடை அளிக்க (Pay Now) 💳</button>
         </div>
 
-        <!-- Account Details -->
         <div class="card style-classic">
             <h3>வங்கிக் கணக்கு விவரங்கள்</h3>
             <p><b>வங்கி:</b> ICICI Bank</p>
@@ -535,7 +546,7 @@
         <div class="card style-classic">
             <h3>UPI மூலம் நேரடியாக செலுத்த</h3>
             <p><b>GPay / PhonePe / Paytm UPI:</b></p>
-            <p style="font-weight:700; color:var(--primary-blue); font-size:15px; margin-top:4px;">9444648516@upi</p>
+            <p style="font-weight:700; color:var(--accent-gold); font-size:15px; margin-top:4px;">9444648516@upi</p>
         </div>
     </div>
 
@@ -557,7 +568,6 @@
 <script>
     let selectedPaymentType = 'upi';
 
-    // Admin Toggle
     function toggleAdminMode() {
         if(document.body.classList.contains('admin-mode')) {
             document.body.classList.remove('admin-mode');
@@ -573,7 +583,6 @@
         }
     }
 
-    // Tab Switching
     function switchTab(element, tabId) {
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -588,14 +597,12 @@
         switchTab(navItems[tabIndex], tabId);
     }
 
-    // Payment Mode Selector
     function selectPaymentMode(el, mode) {
         document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
         el.classList.add('selected');
         selectedPaymentType = mode;
     }
 
-    // Donation Processor
     function processDonation() {
         let name = document.getElementById('donorName').value.trim();
         let phone = document.getElementById('donorPhone').value.trim();
@@ -614,7 +621,6 @@
         }
     }
 
-    // Dynamic Card Controls
     function moveCardUp(id) {
         let card = document.getElementById(id);
         if (card.previousElementSibling) {
@@ -645,7 +651,6 @@
         card.classList.add(styles[nextIndex]);
     }
 
-    // Home Functions
     function addHomeCard() {
         let title = document.getElementById('homeTitleInput').value;
         let desc = document.getElementById('homeDescInput').value;
@@ -681,7 +686,6 @@
         if(newDesc !== null) card.querySelector('.card-desc-text').innerText = newDesc;
     }
 
-    // Committee Members Re-numbering & Controls
     function renumberCommitteeMembers() {
         let members = document.querySelectorAll('#committeeMembersList .member-list-item');
         members.forEach((item, index) => {
@@ -734,7 +738,7 @@
         let html = `
             <div class="member-list-item" id="${id}">
                 <span>${name}</span>
-                <div class="action-bar admin-only" style="margin:0;">
+                <div class="action-bar admin-only" style="margin:0; border:none; padding:0;">
                     <button class="btn-sm btn-move" onclick="moveMemberUp('${id}')">⬆️</button>
                     <button class="btn-sm btn-move" onclick="moveMemberDown('${id}')">⬇️</button>
                     <button class="btn-sm btn-edit" onclick="editMemberName('${id}')">✏️</button>
@@ -746,7 +750,6 @@
         renumberCommitteeMembers();
     }
 
-    // Projects & Services Functions
     function addSubItemRow() {
         let row = `
             <div class="sub-item-row">
@@ -801,7 +804,6 @@
         if(newDesc !== null) card.querySelector('.card-desc-text').innerText = newDesc;
     }
 
-    // Feedback
     function addFeedback() {
         let name = document.getElementById('feedbackNameInput').value || 'பெயர் குறிப்பிடப்படாதவர்';
         let text = document.getElementById('feedbackTextInput').value;
