@@ -2,7 +2,7 @@
 <html lang="ta">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>அல் முயீன் அறக்கட்டளை - AL MUEEN TRUST</title>
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -28,58 +28,50 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Mukta Malar', 'Poppins', sans-serif; }
-        body { background-color: #060E18; color: var(--text-dark); display: flex; justify-content: center; min-height: 100vh; }
+        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background-color: #060E18; color: var(--text-dark); display: flex; justify-content: center; min-height: 100vh; }
         
         .app-container { width: 100%; max-width: 440px; background: var(--bg-light); min-height: 100vh; box-shadow: 0 0 50px rgba(0,0,0,0.5); position: relative; padding-bottom: 100px; overflow-x: hidden; }
         
-        .app-header { background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%); color: #fff; padding: 25px 20px 20px; text-align: center; border-bottom: 4px solid var(--accent-gold); position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; }
+        .app-header { background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%); color: #fff; padding: 20px 15px; text-align: center; border-bottom: 4px solid var(--accent-gold); position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; width: 100%; }
         .app-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(212,175,55,0.1); border-radius: 50%; pointer-events: none; }
         .app-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); }
         
-        .header-profile-img { width: 75px; height: 75px; border-radius: 50%; border: 2.5px solid var(--accent-gold); object-fit: cover; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); flex-shrink: 0; background: #fff; }
-        .header-text-box { text-align: left; flex: 1; }
+        .header-profile-img { width: 65px; height: 65px; min-width: 65px; border-radius: 50%; border: 2.5px solid var(--accent-gold); object-fit: cover; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); background: #fff; }
+        .header-text-box { text-align: left; flex: 1; min-width: 0; }
 
-        .arabic-title { color: var(--accent-gold); font-size: 22px; font-weight: 700; letter-spacing: 1px; font-family: serif; text-shadow: 0 2px 8px rgba(212,175,55,0.3); margin-bottom: 2px; }
-        .app-header h1 { font-size: 18px; font-weight: 700; margin-top: 2px; letter-spacing: 0.5px; color: #FFFFFF; }
-        .app-header p { font-size: 10.5px; opacity: 0.9; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; color: var(--accent-gold); margin-top: 4px; }
+        .arabic-title { color: var(--accent-gold); font-size: 19px; font-weight: 700; letter-spacing: 1px; font-family: serif; text-shadow: 0 2px 8px rgba(212,175,55,0.3); margin-bottom: 2px; }
+        .app-header h1 { font-size: 15px; font-weight: 700; margin-top: 2px; letter-spacing: 0.5px; color: #FFFFFF; word-break: break-word; }
+        .app-header p { font-size: 9px; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: var(--accent-gold); margin-top: 4px; line-height: 1.3; }
         
-        .tab-content { display: none; padding: 20px; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-content { display: none; padding: 15px; width: 100%; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .section-header { font-size: 18px; color: var(--accent-gold); font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--accent-gold); padding-left: 12px; background: linear-gradient(90deg, rgba(212,175,55,0.15), transparent); padding-top: 6px; padding-bottom: 6px; border-radius: 0 8px 8px 0; }
+        .section-header { font-size: 17px; color: var(--accent-gold); font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--accent-gold); padding-left: 12px; background: linear-gradient(90deg, rgba(212,175,55,0.15), transparent); padding-top: 6px; padding-bottom: 6px; border-radius: 0 8px 8px 0; }
 
-        .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; border: 1.5px solid rgba(212, 175, 55, 0.35); box-shadow: 0 0 12px rgba(212, 175, 55, 0.15), inset 0 0 10px rgba(212, 175, 55, 0.05); position: relative; transition: all 0.3s ease; }
+        .card { background: var(--card-bg); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; border: 1.5px solid rgba(212, 175, 55, 0.35); box-shadow: 0 0 12px rgba(212, 175, 55, 0.15), inset 0 0 10px rgba(212, 175, 55, 0.05); position: relative; transition: all 0.3s ease; width: 100%; word-wrap: break-word; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.1); border-color: var(--accent-gold); }
-        .card h3 { color: var(--accent-gold); margin-bottom: 8px; font-size: 16.5px; font-weight: 700; letter-spacing: 0.3px; }
-        .card p, .card ul, .card ol { font-size: 14px; color: #CBD5E1; line-height: 1.7; }
-        .card ul, .card ol { padding-left: 20px; }
+        .card h3 { color: var(--accent-gold); margin-bottom: 8px; font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
+        .card p, .card ul, .card ol { font-size: 13.5px; color: #CBD5E1; line-height: 1.7; }
+        .card ul, .card ol { padding-left: 18px; }
 
         .card.style-classic { border-left: 5px solid var(--accent-gold); }
         .card.style-rounded { border-radius: 24px; border-left: 5px solid var(--accent-gold); }
         .card.style-shadow { border-radius: var(--radius-md); box-shadow: 0 0 25px rgba(212, 175, 55, 0.25); border-left: 5px solid var(--accent-gold); }
         .card.style-flat { border: 2px solid var(--accent-gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); background: #112233; }
         
-        .badge { display: inline-block; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.35)); color: #FACC15; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(212, 175, 55, 0.5); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
+        .badge { display: inline-block; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.35)); color: #FACC15; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(212, 175, 55, 0.5); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
         .badge-blue { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.35)); color: #60A5FA; border-color: rgba(59, 130, 246, 0.5); box-shadow: 0 0 10px rgba(59,130,246,0.2); }
         
-        .form-group { margin-bottom: 14px; }
+        .form-group { margin-bottom: 14px; width: 100%; }
         .form-group label { display: block; font-size: 12.5px; font-weight: 700; color: var(--accent-gold); margin-bottom: 6px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; border: 1.5px solid rgba(212, 175, 55, 0.3); border-radius: 10px; font-size: 13.5px; outline: none; transition: all 0.3s ease; background: #0A1522; color: #FFFFFF; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; max-width: 100%; padding: 12px 14px; border: 1.5px solid rgba(212, 175, 55, 0.3); border-radius: 10px; font-size: 13.5px; outline: none; transition: all 0.3s ease; background: #0A1522; color: #FFFFFF; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-gold); background: #112233; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
         
         .btn { width: 100%; background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%); color: #fff; border: 1px solid rgba(212, 175, 55, 0.4); padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14.5px; text-align: center; display: inline-block; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(11, 25, 44, 0.2); }
         .btn:hover { background: linear-gradient(135deg, #1E3E62 0%, #0B192C 100%); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3); }
         .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%); color: #0B192C; box-shadow: var(--shadow-gold); border: none; }
         .btn-gold:hover { background: linear-gradient(135deg, #E5C158 0%, #C49F27 100%); transform: translateY(-2px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
-
-        .account-box { background: #112233; border: 1.5px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 14px; margin-top: 12px; box-shadow: 0 0 10px rgba(212,175,55,0.1); }
-        .account-box h4 { font-size: 13.5px; color: var(--accent-gold); margin-bottom: 10px; font-weight: 700; }
-        
-        .account-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 10px; }
-        .account-table th, .account-table td { border: 1px solid rgba(212, 175, 55, 0.2); padding: 8px 10px; text-align: left; color: #CBD5E1; }
-        .account-table th { background: #1E3E62; color: var(--accent-gold); font-weight: 700; }
-        .total-row { font-weight: 700; background: rgba(212, 175, 55, 0.2); color: #FACC15; }
 
         .action-bar { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; border-top: 1px dashed rgba(212, 175, 55, 0.3); padding-top: 10px; }
         .btn-sm { padding: 6px 10px; font-size: 11.5px; border-radius: 8px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; border: none; transition: all 0.2s; }
@@ -92,10 +84,10 @@
         .btn-style { background: #8B5CF6; color: #fff; }
 
         .add-service-card { border-left-color: #3B82F6; background: #0F1F30; border: 1.5px dashed rgba(59, 130, 246, 0.5); box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
-        .sub-item-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
-        .sub-item-row input[type="text"] { flex: 2; }
-        .sub-item-row input[type="number"] { flex: 1; }
-        .btn-remove-row { background: #EF4444; color: #fff; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; transition: background 0.2s; }
+        .sub-item-row { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; width: 100%; }
+        .sub-item-row input[type="text"] { flex: 2; min-width: 0; }
+        .sub-item-row input[type="number"] { flex: 1; min-width: 0; }
+        .btn-remove-row { background: #EF4444; color: #fff; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; transition: background 0.2s; flex-shrink: 0; }
         .btn-remove-row:hover { background: #DC2626; }
 
         .admin-only { display: none !important; }
@@ -106,13 +98,14 @@
         .admin-toggle-btn { background: #112233; color: var(--accent-gold); border: 1.5px solid var(--accent-gold); padding: 8px 16px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 700; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); transition: all 0.2s; }
         .admin-toggle-btn:hover { background: #1E3E62; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
 
-        .bottom-nav { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); width: calc(100% - 24px); max-width: 416px; background: rgba(11, 25, 44, 0.95); backdrop-filter: blur(12px); display: flex; justify-content: space-around; padding: 10px 6px; border-radius: 20px; border: 1.5px solid rgba(212, 175, 55, 0.4); z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.2); }
-        .nav-item { color: #94A3B8; text-decoration: none; font-size: 11px; text-align: center; cursor: pointer; flex: 1; transition: all 0.3s ease; padding: 4px 0; border-radius: 12px; }
+        .bottom-nav { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); width: calc(100% - 20px); max-width: 420px; background: rgba(11, 25, 44, 0.95); backdrop-filter: blur(12px); display: flex; justify-content: space-around; padding: 8px 4px; border-radius: 20px; border: 1.5px solid rgba(212, 175, 55, 0.4); z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.2); }
+        .nav-item { color: #94A3B8; text-decoration: none; font-size: 10.5px; text-align: center; cursor: pointer; flex: 1; transition: all 0.3s ease; padding: 4px 0; border-radius: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .nav-item.active { color: var(--accent-gold); font-weight: 700; background: rgba(212, 175, 55, 0.15); transform: translateY(-2px); text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); }
-        .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+        .nav-icon { font-size: 16px; display: block; margin-bottom: 2px; }
 
         .date-time-tag { font-size: 11px; color: var(--text-muted); margin-top: 8px; font-style: italic; display: block; }
-        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px dashed rgba(212, 175, 55, 0.2); font-size: 14px; color: #CBD5E1; }
+        .member-list-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px dashed rgba(212, 175, 55, 0.2); font-size: 14px; color: #CBD5E1; gap: 8px; }
+        .member-list-item span { flex: 1; word-break: break-word; }
 
         .payment-options { display: flex; gap: 10px; margin-bottom: 14px; }
         .payment-option { flex: 1; border: 1.5px solid rgba(212, 175, 55, 0.3); padding: 12px; border-radius: 10px; text-align: center; cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--accent-gold); background: #0A1522; transition: all 0.3s ease; }
@@ -203,7 +196,7 @@
 
         <div id="teamContainer">
             <div class="card style-classic" id="team-1">
-                <span class="badge role-text">நிறுவனர் & தலைவர்(Founder & President  CEO)</span>
+                <span class="badge role-text">நிறுவனர் & தலைவர் (Founder & President CEO)</span>
                 <h3 class="name-text">மௌலானா மௌலவி முஃப்தீ T. ஷர்ஃபுதீன் பாகவி</h3>
                 <p class="phone-text"><b>📞 மொபைல்:</b> 9444648516</p>
                 <p class="work-text"><b>பணி:</b> அறக்கட்டளையின் ஒட்டுமொத்த வழிகாட்டுதல் மற்றும் முடிவுகள்.</p>
@@ -216,16 +209,11 @@
                 </div>
             </div>
 
-
-            </div>
             <div class="card style-classic" id="team-2">
                 <span class="badge role-text">துணைத் தலைவர் (Vice President)</span>
                 <h3 class="name-text">அல் ஹாஃபிழ் அர்ஷத் அஹ்மது காஷிஃபி</h3>
-                <p class="phone-text"><b>📞 மொபைல்:</b>74184 46965-</p>
-                <p class="work-text"><b>பணி:</b> தலைவருக்கு உதவுதல்,தலைவர் இல்லாதபோது செயல்படுதல்,
-                 கூட்டங்களில் பங்கேற்பது,சேவைத் திட்டங்களைக் கண்காணித்தல்,
-                    உறுப்பினர்களுடன் ஒருங்கிணைந்து செயல்படுதல்,
-                    நன்கொடைகளைச் சரியாகப் பயன்படுத்த உதவுதல்,பிரச்சினைகளுக்குத் தீர்வு காணுதல்,அறக்கட்டளையின் வளர்ச்சிக்குப் பாடுபடுதல்.</p>
+                <p class="phone-text"><b>📞 மொபைல்:</b> 74184 46965</p>
+                <p class="work-text"><b>பணி:</b> தலைவருக்கு உதவுதல், தலைவர் இல்லாதபோது செயல்படுதல், கூட்டங்களில் பங்கேற்பது, சேவைத் திட்டங்களைக் கண்காணித்தல், உறுப்பினர்களுடன் ஒருங்கிணைந்து செயல்படுதல், நன்கொடைகளைச் சரியாகப் பயன்படுத்த உதவுதல், பிரச்சினைகளுக்குத் தீர்வு காணுதல், அறக்கட்டளையின் வளர்ச்சிக்குப் பாடுபடுதல்.</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-2')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-2')">⬇️ கீழே</button>
@@ -235,25 +223,11 @@
                 </div>
             </div>
             
-            <div class="card style-classic" id="team-2">
+            <div class="card style-classic" id="team-3">
                 <span class="badge role-text">செயலாளர் (General Secretary)</span>
                 <h3 class="name-text">அல் ஹாஃபிழ் அப்துல் ஹஸீப்</h3>
                 <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
                 <p class="work-text"><b>பணி:</b> அறக்கட்டளையின் தினசரி செயல்பாடுகள் மற்றும் நிர்வாக ஒருங்கிணைப்பு.</p>
-                <div class="action-bar admin-only">
-                    <button class="btn-sm btn-move" onclick="moveCardUp('team-2')">⬆️ மேலே</button>
-                    <button class="btn-sm btn-move" onclick="moveCardDown('team-2')">⬇️ கீழே</button>
-                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-2')">🎨 ஸ்டைல்</button>
-                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-2')">✏️ எடிட்</button>
-                    <button class="btn-sm btn-delete" onclick="deleteCard('team-2')">🗑️ நீக்கு</button>
-                </div>
-            </div>
-
-            <div class="card style-classic" id="team-3">
-                <span class="badge role-text">துணை செயலாளர் (Deputy Secretary)</span>
-                <h3 class="name-text">அல் ஹாஃபிழ் தவ்ஃபீக் அஹ்மது</h3>
-                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
-                <p class="work-text"><b>பணி:</b> செயலாளர் ஈடுபாடுகளில், துணை செயலாளர் நிர்வாக மற்றும் ஆவணப் பணிகளில் உதவுவார்.</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-3')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-3')">⬇️ கீழே</button>
@@ -264,10 +238,10 @@
             </div>
 
             <div class="card style-classic" id="team-4">
-                <span class="badge role-text">பொருளாளர் (Treasurer)</span>
-                <h3 class="name-text">அல் ஹாஃபிழ் அஸதுல்லாஹ்</h3>
+                <span class="badge role-text">துணை செயலாளர் (Deputy Secretary)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் தவ்ஃபீக் அஹ்மது</h3>
                 <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
-                <p class="work-text"><b>பணி:</b> வரவு செலவு கணக்குகள் மற்றும் நிதி மேலாண்மை.</p>
+                <p class="work-text"><b>பணி:</b> செயலாளர் ஈடுபாடுகளில், துணை செயலாளர் நிர்வாக மற்றும் ஆவணப் பணிகளில் உதவுவார்.</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-4')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-4')">⬇️ கீழே</button>
@@ -278,10 +252,10 @@
             </div>
 
             <div class="card style-classic" id="team-5">
-                <span class="badge role-text">துணை பொருளாளர் (Deputy Treasurer)</span>
-                <h3 class="name-text">அத் தாலிப் அப்ராருல் ஹக்</h3>
+                <span class="badge role-text">பொருளாளர் (Treasurer)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் அஸதுல்லாஹ்</h3>
                 <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
-                <p class="work-text"><b>பணி:</b> வரவு செலவு கணக்குகள் மற்றும் நிதி மேலாண்மைகளில் துணையாக பணியாற்றுவார்.</p>
+                <p class="work-text"><b>பணி:</b> வரவு செலவு கணக்குகள் மற்றும் நிதி மேலாண்மை.</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-5')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-5')">⬇️ கீழே</button>
@@ -292,10 +266,10 @@
             </div>
 
             <div class="card style-classic" id="team-6">
-                <span class="badge role-text">ஆவண காப்பாளர் (Records Keeper)</span>
-                <h3 class="name-text">அல் ஹாஃபிழ் குத்புத்தீன்</h3>
+                <span class="badge role-text">துணை பொருளாளர் (Deputy Treasurer)</span>
+                <h3 class="name-text">அத் தாலிப் அப்ராருல் ஹக்</h3>
                 <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
-                <p class="work-text"><b>பணி:</b> பதிவுகள், ஆவணங்கள், மற்றும் முக்கிய தகவல்களை பாதுகாக்கும் அதிகாரி.</p>
+                <p class="work-text"><b>பணி:</b> வரவு செலவு கணக்குகள் மற்றும் நிதி மேலாண்மைகளில் துணையாக பணியாற்றுவார்.</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-6')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-6')">⬇️ கீழே</button>
@@ -306,10 +280,10 @@
             </div>
 
             <div class="card style-classic" id="team-7">
-                <span class="badge role-text">செயற்குழு ஒருங்கிணைப்பாளர் (Committee Coordinator)</span>
-                <h3 class="name-text">அல் ஹாஃபிழ் அல்தாஃப்</h3>
+                <span class="badge role-text">ஆவண காப்பாளர் (Records Keeper)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் குத்புத்தீன்</h3>
                 <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
-                <p class="work-text"><b>பணி:</b> செயற்குழுவின் செயல்பாடுகளை ஒருங்கிணைத்து, கூட்டங்களை ஏற்பாடு செய்து, உறுப்பினர்களுக்கு தகவல் பரிமாற்றம் செய்பவர்.</p>
+                <p class="work-text"><b>பணி:</b> பதிவுகள், ஆவணங்கள், மற்றும் முக்கிய தகவல்களை பாதுகாக்கும் அதிகாரி.</p>
                 <div class="action-bar admin-only">
                     <button class="btn-sm btn-move" onclick="moveCardUp('team-7')">⬆️ மேலே</button>
                     <button class="btn-sm btn-move" onclick="moveCardDown('team-7')">⬇️ கீழே</button>
@@ -320,6 +294,20 @@
             </div>
 
             <div class="card style-classic" id="team-8">
+                <span class="badge role-text">செயற்குழு ஒருங்கிணைப்பாளர் (Committee Coordinator)</span>
+                <h3 class="name-text">அல் ஹாஃபிழ் அல்தாஃப்</h3>
+                <p class="phone-text"><b>📞 மொபைல்:</b> -</p>
+                <p class="work-text"><b>பணி:</b> செயற்குழுவின் செயல்பாடுகளை ஒருங்கிணைத்து, கூட்டங்களை ஏற்பாடு செய்து, உறுப்பினர்களுக்கு தகவல் பரிமாற்றம் செய்பவர்.</p>
+                <div class="action-bar admin-only">
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-8')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-8')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-8')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-edit" onclick="editTeamMember('team-8')">✏️ எடிட்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-8')">🗑️ நீக்கு</button>
+                </div>
+            </div>
+
+            <div class="card style-classic" id="team-9">
                 <span class="badge role-text">நிர்வாகக் குழு உறுப்பினர்கள்</span>
                 <h3 class="name-text">செயற்குழு உறுப்பினர்கள் பட்டியல்</h3>
                 <div id="committeeMembersList" style="margin-top:10px;">
@@ -403,10 +391,10 @@
                 </div>
 
                 <div class="action-bar admin-only" style="margin-top:12px;">
-                    <button class="btn-sm btn-move" onclick="moveCardUp('team-8')">⬆️ மேலே</button>
-                    <button class="btn-sm btn-move" onclick="moveCardDown('team-8')">⬇️ கீழே</button>
-                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-8')">🎨 ஸ்டைல்</button>
-                    <button class="btn-sm btn-delete" onclick="deleteCard('team-8')">🗑️ நீக்கு</button>
+                    <button class="btn-sm btn-move" onclick="moveCardUp('team-9')">⬆️ மேலே</button>
+                    <button class="btn-sm btn-move" onclick="moveCardDown('team-9')">⬇️ கீழே</button>
+                    <button class="btn-sm btn-style" onclick="customizeCardStyle('team-9')">🎨 ஸ்டைல்</button>
+                    <button class="btn-sm btn-delete" onclick="deleteCard('team-9')">🗑️ நீக்கு</button>
                 </div>
             </div>
         </div>
@@ -576,7 +564,6 @@
 <script>
     let selectedPaymentType = 'upi';
 
-    // Save initial HTML to localStorage on first load
     window.addEventListener('DOMContentLoaded', () => {
         if(!localStorage.getItem('trust_home_html')) {
             localStorage.setItem('trust_home_html', document.getElementById('homeContainer').innerHTML);
